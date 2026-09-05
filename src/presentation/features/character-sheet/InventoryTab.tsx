@@ -91,7 +91,7 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                       min={0}
                       value={item.quantity}
                       onChange={(e) => updateItem(item.id, { quantity: Number(e.target.value) })}
-                      className="w-16 text-center"
+                      className="!w-16 text-center"
                     />
                   </td>
                   <td className="px-2 py-1.5">
@@ -99,7 +99,7 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                       min={0}
                       value={item.weight}
                       onChange={(e) => updateItem(item.id, { weight: Number(e.target.value) })}
-                      className="w-20 text-center"
+                      className="!w-20 text-center"
                     />
                   </td>
                   <td className="px-2 py-1.5 text-center">
@@ -132,7 +132,7 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
             if (e.target.value) addFromCatalog(e.target.value);
             e.target.value = "";
           }}
-          className="w-auto"
+          className="!w-auto"
         >
           <option value="" disabled>
             {t("actions.add")}

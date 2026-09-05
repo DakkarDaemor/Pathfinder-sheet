@@ -106,7 +106,7 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
                 max={20}
                 value={cl.level}
                 onChange={(e) => updateClassLevel(index, { level: Number(e.target.value) })}
-                className="w-20"
+                className="!w-20"
               />
               <Button variant="ghost" onClick={() => removeClassLevel(index)}>
                 {t("actions.remove")}

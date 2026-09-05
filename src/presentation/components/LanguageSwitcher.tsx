@@ -18,7 +18,7 @@ export function LanguageSwitcher() {
       aria-label={t("nav.language")}
       value={language}
       onChange={(e) => setLanguage(e.target.value as (typeof SUPPORTED_LANGUAGES)[number])}
-      className="w-auto"
+      className="!w-auto"
     >
       {SUPPORTED_LANGUAGES.map((lang) => (
         <option key={lang} value={lang}>

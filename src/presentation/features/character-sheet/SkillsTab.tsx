@@ -55,7 +55,7 @@ export function SkillsTab({ character, onChange }: SkillsTabProps) {
                     min={0}
                     value={skillState?.ranks ?? 0}
                     onChange={(e) => updateSkill(skillDef.id, { ranks: Number(e.target.value) })}
-                    className="w-16 text-center"
+                    className="!w-16 text-center"
                   />
                 </td>
                 <td className="px-2 py-1.5">
@@ -63,7 +63,7 @@ export function SkillsTab({ character, onChange }: SkillsTabProps) {
                     aria-label={t("characterSheet.skills.misc")}
                     value={skillState?.miscModifier ?? 0}
                     onChange={(e) => updateSkill(skillDef.id, { miscModifier: Number(e.target.value) })}
-                    className="w-16 text-center"
+                    className="!w-16 text-center"
                   />
                 </td>
                 <td className="px-2 py-1.5 text-center font-semibold">{total?.total ?? 0}</td>
