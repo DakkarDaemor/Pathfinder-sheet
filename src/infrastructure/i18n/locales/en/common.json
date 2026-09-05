@@ -1,0 +1,173 @@
+{
+  "app": {
+    "title": "Pathfinder Sheet",
+    "subtitle": "Pathfinder 1st Edition character manager"
+  },
+  "nav": {
+    "characters": "Characters",
+    "toggleTheme": "Toggle theme",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme",
+    "language": "Language"
+  },
+  "actions": {
+    "new": "New",
+    "save": "Save",
+    "load": "Load",
+    "open": "Open",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "export": "Export JSON",
+    "import": "Import JSON",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "add": "Add",
+    "remove": "Remove",
+    "back": "Back",
+    "close": "Close"
+  },
+  "status": {
+    "autosaveOn": "Autosave is on",
+    "saved": "Saved",
+    "exported": "Character exported as JSON",
+    "imported": "Character imported successfully",
+    "importError": "Invalid file: could not import the character",
+    "noCharacters": "No characters yet. Create a new one or import one from a file."
+  },
+  "confirm": {
+    "deleteCharacterTitle": "Delete this character?",
+    "deleteCharacterBody": "\"{{name}}\" and its linked companions will be permanently deleted. This cannot be undone.",
+    "deleteCompanionTitle": "Delete this companion?",
+    "deleteCompanionBody": "\"{{name}}\" will be permanently deleted. This cannot be undone.",
+    "overwriteOnImportTitle": "Overwrite the existing character?",
+    "overwriteOnImportBody": "A character with the same id already exists. Importing will replace its current data.",
+    "discardUnsavedTitle": "Discard unsaved changes?",
+    "discardUnsavedBody": "There are unsaved changes. Continuing will lose them."
+  },
+  "characterList": {
+    "heading": "Your characters",
+    "newCharacter": "New character",
+    "defaultCharacterName": "New character",
+    "importCharacter": "Import from file",
+    "levelLabel": "Level {{level}}",
+    "companionsCount": "{{count}} companion(s)",
+    "copySuffix": "(copy)"
+  },
+  "characterSheet": {
+    "tabs": {
+      "profile": "Profile",
+      "abilities": "Abilities",
+      "combat": "Combat",
+      "skills": "Skills",
+      "feats": "Feats",
+      "inventory": "Inventory",
+      "spells": "Spells",
+      "companions": "Companions",
+      "notes": "Notes"
+    },
+    "profile": {
+      "name": "Character name",
+      "playerName": "Player name",
+      "race": "Race",
+      "alignment": "Alignment",
+      "deity": "Deity",
+      "size": "Size",
+      "classesAndLevels": "Classes & levels",
+      "addClass": "Add class",
+      "class": "Class",
+      "level": "Level",
+      "totalLevel": "Total level"
+    },
+    "abilities": {
+      "score": "Score",
+      "modifier": "Modifier",
+      "str": "Strength",
+      "dex": "Dexterity",
+      "con": "Constitution",
+      "int": "Intelligence",
+      "wis": "Wisdom",
+      "cha": "Charisma"
+    },
+    "combat": {
+      "armorClass": "Armor Class",
+      "acNormal": "AC",
+      "acTouch": "Touch AC",
+      "acFlatFooted": "Flat-Footed AC",
+      "baseAttackBonus": "Base Attack Bonus",
+      "savingThrows": "Saving Throws",
+      "fort": "Fortitude",
+      "ref": "Reflex",
+      "will": "Will",
+      "initiative": "Initiative",
+      "combatManeuvers": "Combat Maneuvers",
+      "cmb": "CMB",
+      "cmd": "CMD",
+      "hitPoints": "Hit Points",
+      "hpMax": "Max HP",
+      "hpCurrent": "Current HP",
+      "hpNonLethal": "Nonlethal Damage",
+      "carryingCapacity": "Carrying Capacity",
+      "light": "Light",
+      "medium": "Medium",
+      "heavy": "Heavy",
+      "defenseLoadout": "Defense Modifiers",
+      "armorBonus": "Armor Bonus",
+      "shieldBonus": "Shield Bonus",
+      "armorMaxDexBonus": "Max Dex (Armor)",
+      "armorCheckPenalty": "Armor Check Penalty",
+      "naturalArmor": "Natural Armor",
+      "deflection": "Deflection",
+      "dodge": "Dodge",
+      "miscAc": "Misc AC"
+    },
+    "skills": {
+      "skill": "Skill",
+      "ranks": "Ranks",
+      "classSkill": "Class Skill",
+      "misc": "Misc",
+      "total": "Total",
+      "trainedOnly": "Trained Only"
+    },
+    "feats": {
+      "heading": "Feats",
+      "selectFeat": "Select a feat",
+      "notes": "Notes",
+      "empty": "No feats added yet."
+    },
+    "inventory": {
+      "heading": "Inventory",
+      "itemName": "Item",
+      "quantity": "Quantity",
+      "weight": "Weight",
+      "equipped": "Equipped",
+      "totalWeight": "Total weight",
+      "empty": "No items in the inventory."
+    },
+    "spells": {
+      "heading": "Spells",
+      "selectSpell": "Select a spell",
+      "prepared": "Prepared",
+      "empty": "No spells known yet."
+    },
+    "companions": {
+      "heading": "Companions",
+      "addCompanion": "Add companion",
+      "kind": "Kind",
+      "kindAnimalCompanion": "Animal Companion",
+      "kindFamiliar": "Familiar",
+      "kindMount": "Mount",
+      "baseCreature": "Base creature",
+      "masterLevel": "Master level",
+      "tricksOrTraits": "Tricks / Traits",
+      "empty": "No companion linked to this character yet."
+    },
+    "notes": {
+      "heading": "Notes",
+      "placeholder": "Background, goals, session notes..."
+    }
+  },
+  "validation": {
+    "required": "Required field",
+    "mustBePositive": "Must be a positive number"
+  }
+}

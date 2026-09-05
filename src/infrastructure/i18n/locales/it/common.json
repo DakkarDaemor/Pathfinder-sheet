@@ -1,0 +1,173 @@
+{
+  "app": {
+    "title": "Pathfinder Sheet",
+    "subtitle": "Gestione personaggi Pathfinder 1a Edizione"
+  },
+  "nav": {
+    "characters": "Personaggi",
+    "toggleTheme": "Cambia tema",
+    "themeLight": "Tema chiaro",
+    "themeDark": "Tema scuro",
+    "language": "Lingua"
+  },
+  "actions": {
+    "new": "Nuovo",
+    "save": "Salva",
+    "load": "Carica",
+    "open": "Apri",
+    "duplicate": "Duplica",
+    "delete": "Elimina",
+    "export": "Esporta JSON",
+    "import": "Importa JSON",
+    "cancel": "Annulla",
+    "confirm": "Conferma",
+    "add": "Aggiungi",
+    "remove": "Rimuovi",
+    "back": "Indietro",
+    "close": "Chiudi"
+  },
+  "status": {
+    "autosaveOn": "Salvataggio automatico attivo",
+    "saved": "Salvato",
+    "exported": "Personaggio esportato in JSON",
+    "imported": "Personaggio importato con successo",
+    "importError": "File non valido: impossibile importare il personaggio",
+    "noCharacters": "Nessun personaggio ancora creato. Creane uno nuovo o importane uno da file."
+  },
+  "confirm": {
+    "deleteCharacterTitle": "Eliminare il personaggio?",
+    "deleteCharacterBody": "\"{{name}}\" e i suoi companion collegati verranno eliminati definitivamente. L'azione non è reversibile.",
+    "deleteCompanionTitle": "Eliminare il companion?",
+    "deleteCompanionBody": "\"{{name}}\" verrà eliminato definitivamente. L'azione non è reversibile.",
+    "overwriteOnImportTitle": "Sovrascrivere il personaggio esistente?",
+    "overwriteOnImportBody": "Esiste già un personaggio con lo stesso identificativo. Importando, i suoi dati attuali verranno sostituiti.",
+    "discardUnsavedTitle": "Scartare le modifiche non salvate?",
+    "discardUnsavedBody": "Sono presenti modifiche non ancora salvate. Continuando verranno perse."
+  },
+  "characterList": {
+    "heading": "I tuoi personaggi",
+    "newCharacter": "Nuovo personaggio",
+    "defaultCharacterName": "Nuovo personaggio",
+    "importCharacter": "Importa da file",
+    "levelLabel": "Livello {{level}}",
+    "companionsCount": "{{count}} companion",
+    "copySuffix": "(copia)"
+  },
+  "characterSheet": {
+    "tabs": {
+      "profile": "Anagrafica",
+      "abilities": "Caratteristiche",
+      "combat": "Combattimento",
+      "skills": "Abilità",
+      "feats": "Talenti",
+      "inventory": "Equipaggiamento",
+      "spells": "Incantesimi",
+      "companions": "Companion",
+      "notes": "Note"
+    },
+    "profile": {
+      "name": "Nome del personaggio",
+      "playerName": "Nome del giocatore",
+      "race": "Razza",
+      "alignment": "Allineamento",
+      "deity": "Divinità",
+      "size": "Taglia",
+      "classesAndLevels": "Classi e livelli",
+      "addClass": "Aggiungi classe",
+      "class": "Classe",
+      "level": "Livello",
+      "totalLevel": "Livello totale"
+    },
+    "abilities": {
+      "score": "Punteggio",
+      "modifier": "Modificatore",
+      "str": "Forza",
+      "dex": "Destrezza",
+      "con": "Costituzione",
+      "int": "Intelligenza",
+      "wis": "Saggezza",
+      "cha": "Carisma"
+    },
+    "combat": {
+      "armorClass": "Classe Armatura",
+      "acNormal": "CA",
+      "acTouch": "CA Contatto",
+      "acFlatFooted": "CA Colto di Sorpresa",
+      "baseAttackBonus": "Bonus Base di Attacco",
+      "savingThrows": "Tiri Salvezza",
+      "fort": "Tempra",
+      "ref": "Riflessi",
+      "will": "Volontà",
+      "initiative": "Iniziativa",
+      "combatManeuvers": "Manovre di Combattimento",
+      "cmb": "CMB",
+      "cmd": "CMD",
+      "hitPoints": "Punti Ferita",
+      "hpMax": "PF Massimi",
+      "hpCurrent": "PF Attuali",
+      "hpNonLethal": "Danno Non Letale",
+      "carryingCapacity": "Capacità di Carico",
+      "light": "Leggero",
+      "medium": "Medio",
+      "heavy": "Pesante",
+      "defenseLoadout": "Modificatori alla Difesa",
+      "armorBonus": "Bonus Armatura",
+      "shieldBonus": "Bonus Scudo",
+      "armorMaxDexBonus": "Dex Massima (Armatura)",
+      "armorCheckPenalty": "Penalità Armatura",
+      "naturalArmor": "Armatura Naturale",
+      "deflection": "Deviazione",
+      "dodge": "Schivata",
+      "miscAc": "Varie CA"
+    },
+    "skills": {
+      "skill": "Abilità",
+      "ranks": "Gradi",
+      "classSkill": "Ab. di Classe",
+      "misc": "Varie",
+      "total": "Totale",
+      "trainedOnly": "Solo Addestrati"
+    },
+    "feats": {
+      "heading": "Talenti",
+      "selectFeat": "Seleziona un talento",
+      "notes": "Note",
+      "empty": "Nessun talento aggiunto."
+    },
+    "inventory": {
+      "heading": "Equipaggiamento",
+      "itemName": "Oggetto",
+      "quantity": "Quantità",
+      "weight": "Peso",
+      "equipped": "Indossato",
+      "totalWeight": "Peso totale",
+      "empty": "Nessun oggetto nell'inventario."
+    },
+    "spells": {
+      "heading": "Incantesimi",
+      "selectSpell": "Seleziona un incantesimo",
+      "prepared": "Preparato",
+      "empty": "Nessun incantesimo conosciuto."
+    },
+    "companions": {
+      "heading": "Companion",
+      "addCompanion": "Aggiungi companion",
+      "kind": "Tipo",
+      "kindAnimalCompanion": "Compagno Animale",
+      "kindFamiliar": "Famiglio",
+      "kindMount": "Cavalcatura",
+      "baseCreature": "Creatura base",
+      "masterLevel": "Livello del padrone",
+      "tricksOrTraits": "Trucchi / Tratti",
+      "empty": "Nessun companion collegato a questo personaggio."
+    },
+    "notes": {
+      "heading": "Note",
+      "placeholder": "Background, obiettivi, appunti di sessione..."
+    }
+  },
+  "validation": {
+    "required": "Campo obbligatorio",
+    "mustBePositive": "Deve essere un numero positivo"
+  }
+}

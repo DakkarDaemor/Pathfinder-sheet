@@ -1,0 +1,550 @@
+{
+  "alignment": {
+    "lg": "Legale Buono",
+    "ng": "Neutrale Buono",
+    "cg": "Caotico Buono",
+    "ln": "Legale Neutrale",
+    "n": "Neutrale",
+    "cn": "Caotico Neutrale",
+    "le": "Legale Malvagio",
+    "ne": "Neutrale Malvagio",
+    "ce": "Caotico Malvagio"
+  },
+  "size": {
+    "fine": "Minuscola",
+    "diminutive": "Minuta",
+    "tiny": "Piccolissima",
+    "small": "Piccola",
+    "medium": "Media",
+    "large": "Grande",
+    "huge": "Enorme",
+    "gargantuan": "Mastodontica",
+    "colossal": "Colossale"
+  },
+  "race": {
+    "dwarf": "Nano",
+    "elf": "Elfo",
+    "gnome": "Gnomo",
+    "halfElf": "Mezzelfo",
+    "halfOrc": "Mezzorco",
+    "halfling": "Halfling",
+    "human": "Umano"
+  },
+  "raceTrait": {
+    "darkvision60": "Scurovisione 18 m",
+    "defensiveTraining": "Addestramento Difensivo: bonus di schivata alla CA contro i giganti",
+    "hatred": "Odio: +1 ai tiri per colpire contro una razza nemica prescelta",
+    "hardy": "Resistenza: +2 ai TS contro veleni, incantesimi e abilità magiche",
+    "stability": "Stabilità: +4 alla CMD contro spinta e sgambetto quando è a terra",
+    "greed": "Avidità: +2 a Valutare per oggetti in metalli preziosi/gemme",
+    "stonecunning": "Competenza nella Pietra: +2 a Percezione contro strutture in pietra insolite",
+    "dwarfWeaponFamiliarity": "Dimestichezza con le Armi: ascia da guerra nanica, urgrosh",
+    "slowAndSteady": "Lento ma Inarrestabile: la velocità non è mai ridotta da armatura o carico",
+    "lowLightVision": "Visione Crepuscolare",
+    "elvenImmunities": "Immunità Elfiche: immune al sonno magico, +2 ai TS contro incantesimi di ammaliamento",
+    "keenSenses": "Sensi Acuti: +2 a Percezione",
+    "elvenMagic": "Magia Elfica: +2 contro le prove di Resistenza agli Incantesimi, +2 a Sapienza Magica per identificare oggetti magici",
+    "elfWeaponFamiliarity": "Dimestichezza con le Armi: arco lungo, spada lunga, stocco, arco corto",
+    "gnomeMagic": "Magia Gnomesca: abilità magiche innate, +1 CD agli incantesimi di illusione",
+    "illusionResistance": "Resistenza alle Illusioni: +2 ai TS contro le illusioni",
+    "obsessive": "Ossessivo: +2 a un'abilità Artigianato o Professione a scelta",
+    "adaptability": "Adattabilità: ottiene Focus nell'Abilità come talento bonus al 1° livello",
+    "elfBlood": "Sangue Elfico: conta come elfo e umano",
+    "multitalented": "Multitalento: conta due classi preferite",
+    "intimidatingRace": "Intimidatorio: +2 a Intimidire",
+    "orcBlood": "Sangue Orchesco: conta come orco e umano",
+    "orcFerocity": "Ferocia Orchesca: una volta al giorno può continuare a combattere per un altro round sotto 0 pf",
+    "halfOrcWeaponFamiliarity": "Dimestichezza con le Armi: falcione, ascia doppia orchesca",
+    "fearless": "Impavido: +2 ai TS contro la paura",
+    "halflingLuck": "Fortuna Halfling: +1 a tutti i tiri salvezza",
+    "sureFooted": "Piede Fermo: +2 ad Acrobazia e Scalare",
+    "halflingWeaponFamiliarity": "Dimestichezza con le Armi: fionda",
+    "bonusFeat": "Talento Bonus al 1° livello",
+    "skilled": "Abile: +1 grado abilità per livello"
+  },
+  "class": {
+    "barbarian": "Barbaro",
+    "bard": "Bardo",
+    "cleric": "Chierico",
+    "druid": "Druido",
+    "fighter": "Guerriero",
+    "monk": "Monaco",
+    "paladin": "Paladino",
+    "ranger": "Ranger",
+    "rogue": "Ladro",
+    "sorcerer": "Stregone",
+    "wizard": "Mago"
+  },
+  "classFeature": {
+    "barbarian": {
+      "fastMovement": "Movimento Rapido",
+      "rage": "Ira",
+      "ragePower": "Potere dell'Ira",
+      "uncannyDodge": "Schivata Prodigiosa",
+      "trapSense": "Intuito nelle Trappole",
+      "improvedUncannyDodge": "Schivata Prodigiosa Migliorata",
+      "damageReduction": "Riduzione del Danno",
+      "greaterRage": "Ira Superiore",
+      "tirelessRage": "Ira Instancabile",
+      "mightyRage": "Ira Possente"
+    },
+    "bard": {
+      "bardicKnowledge": "Sapienza Bardica",
+      "bardicPerformance": "Esibizione Bardica",
+      "versatilePerformance": "Esibizione Versatile",
+      "inspireCompetence": "Ispirare Competenza",
+      "suggestion": "Suggestione",
+      "dirgeOfDoom": "Canto Funebre",
+      "inspireGreatness": "Ispirare Grandezza",
+      "soothingPerformance": "Esibizione Rasserenante",
+      "inspireHeroics": "Ispirare Eroismo",
+      "massSuggestion": "Suggestione di Massa",
+      "deadlyPerformance": "Esibizione Letale"
+    },
+    "cleric": {
+      "channelEnergy": "Incanalare Energia",
+      "domains": "Domini",
+      "spontaneousCasting": "Lancio Spontaneo"
+    },
+    "druid": {
+      "natureBond": "Legame con la Natura",
+      "natureSense": "Percezione della Natura",
+      "wildEmpathy": "Empatia Selvatica",
+      "woodlandStride": "Passo Silvano",
+      "tracklessStep": "Passo senza Tracce",
+      "resistNaturesLure": "Resistere al Richiamo della Natura",
+      "wildShape": "Forma Selvatica",
+      "venomImmunity": "Immunità al Veleno",
+      "thousandFaces": "Mille Volti",
+      "timelessBody": "Corpo senza Tempo"
+    },
+    "fighter": {
+      "bonusFeat": "Talento Bonus",
+      "bravery": "Coraggio",
+      "armorTraining": "Addestramento all'Armatura",
+      "weaponTraining": "Addestramento alle Armi",
+      "armorMastery": "Maestria dell'Armatura",
+      "weaponMastery": "Maestria nelle Armi"
+    },
+    "monk": {
+      "flurryOfBlows": "Raffica di Colpi",
+      "improvedUnarmedStrike": "Attacco Non Armato Migliorato",
+      "stunningFist": "Pugno Stordente",
+      "acBonus": "Bonus alla CA",
+      "evasion": "Elusione",
+      "stillMind": "Mente Immobile",
+      "kiPool": "Riserva di Ki",
+      "purityOfBody": "Purezza del Corpo",
+      "wholenessOfBody": "Integrità del Corpo",
+      "improvedEvasion": "Elusione Migliorata",
+      "diamondBody": "Corpo di Diamante",
+      "diamondSoul": "Anima di Diamante",
+      "quiveringPalm": "Palmo Tremante",
+      "timelessBody": "Corpo senza Tempo",
+      "emptyBody": "Corpo Vuoto",
+      "perfectSelf": "Io Perfetto"
+    },
+    "paladin": {
+      "auraOfGood": "Aura del Bene",
+      "detectEvil": "Individuazione del Male",
+      "smiteEvil": "Colpo Punitivo",
+      "divineGrace": "Grazia Divina",
+      "layOnHands": "Imposizione delle Mani",
+      "auraOfCourage": "Aura di Coraggio",
+      "divineHealth": "Salute Divina",
+      "divineBond": "Legame Divino",
+      "auraOfResolve": "Aura di Risolutezza",
+      "auraOfJustice": "Aura di Giustizia",
+      "auraOfFaith": "Aura di Fede",
+      "auraOfRighteousness": "Aura di Rettitudine",
+      "holyChampion": "Campione Sacro"
+    },
+    "ranger": {
+      "favoredEnemy": "Nemico Prescelto",
+      "track": "Traccia",
+      "wildEmpathy": "Empatia Selvatica",
+      "combatStyleFeat": "Talento di Stile di Combattimento",
+      "favoredTerrain": "Terreno Prescelto",
+      "huntersBond": "Legame del Cacciatore",
+      "swiftTracker": "Cacciatore Rapido",
+      "evasion": "Elusione",
+      "camouflage": "Mimetizzazione",
+      "hideInPlainSight": "Nascondersi alla Vista"
+    },
+    "rogue": {
+      "sneakAttack": "Attacco Furtivo",
+      "trapfinding": "Individuare Trappole",
+      "rogueTalent": "Talento da Ladro",
+      "evasion": "Elusione",
+      "trapSense": "Intuito nelle Trappole",
+      "uncannyDodge": "Schivata Prodigiosa",
+      "improvedUncannyDodge": "Schivata Prodigiosa Migliorata",
+      "advancedTalents": "Talenti Avanzati",
+      "masterStrike": "Colpo Magistrale"
+    },
+    "sorcerer": {
+      "bloodline": "Lignaggio",
+      "bloodlineArcana": "Arcano del Lignaggio",
+      "eschewMaterials": "Rinuncia alle Componenti",
+      "bloodlineFeat": "Talento del Lignaggio"
+    },
+    "wizard": {
+      "arcaneBond": "Legame Arcano",
+      "arcaneSchool": "Scuola Arcana",
+      "scribeScroll": "Scrivere Pergamene",
+      "bonusFeat": "Talento Bonus"
+    }
+  },
+  "skill": {
+    "acrobatics": "Acrobazia",
+    "appraise": "Valutare",
+    "bluff": "Raggirare",
+    "climb": "Scalare",
+    "craft": "Artigianato",
+    "diplomacy": "Diplomazia",
+    "disableDevice": "Disattivare Congegni",
+    "disguise": "Camuffare",
+    "escapeArtist": "Fuga",
+    "fly": "Volare",
+    "handleAnimal": "Addestrare Animali",
+    "heal": "Curare",
+    "intimidate": "Intimidire",
+    "knowledgeArcana": "Conoscenze (arcane)",
+    "knowledgeDungeoneering": "Conoscenze (sotterranei)",
+    "knowledgeEngineering": "Conoscenze (ingegneria)",
+    "knowledgeGeography": "Conoscenze (geografia)",
+    "knowledgeHistory": "Conoscenze (storia)",
+    "knowledgeLocal": "Conoscenze (locali)",
+    "knowledgeNature": "Conoscenze (natura)",
+    "knowledgeNobility": "Conoscenze (nobiltà)",
+    "knowledgePlanes": "Conoscenze (piani)",
+    "knowledgeReligion": "Conoscenze (religione)",
+    "linguistics": "Linguistica",
+    "perception": "Percezione",
+    "perform": "Esibirsi",
+    "profession": "Professione",
+    "ride": "Cavalcare",
+    "senseMotive": "Intuizione",
+    "sleightOfHand": "Rapidità di Mano",
+    "spellcraft": "Sapienza Magica",
+    "stealth": "Furtività",
+    "survival": "Sopravvivenza",
+    "swim": "Nuotare",
+    "useMagicDevice": "Usare Oggetti Magici"
+  },
+  "feat": {
+    "acrobatic": { "name": "Acrobatico", "description": "+2 ad Acrobazia e Volare." },
+    "agileManeuvers": {
+      "name": "Manovre Agili",
+      "description": "Usa il modificatore di Destrezza al posto della Forza per le prove di manovra di combattimento."
+    },
+    "alertness": { "name": "Prontezza", "description": "+2 a Percezione e Intuizione." },
+    "animalAffinity": { "name": "Affinità Animale", "description": "+2 ad Addestrare Animali e Cavalcare." },
+    "athletic": { "name": "Atletico", "description": "+2 a Scalare e Nuotare." },
+    "blindFight": {
+      "name": "Combattere alla Cieca",
+      "description": "Ripeti la percentuale di mancare per occultamento; i nemici non hanno vantaggi contro di te se sei accecato."
+    },
+    "cleave": {
+      "name": "Rasoiata",
+      "description": "Attacco extra in mischia contro un nemico adiacente dopo averne atterrato uno.",
+      "prerequisite": "For 13, Attacco Poderoso"
+    },
+    "combatCasting": {
+      "name": "Lanciare in Combattimento",
+      "description": "+4 alle prove di concentrazione per lanciare incantesimi in difesa o mentre sei agganciato."
+    },
+    "combatExpertise": {
+      "name": "Competenza in Combattimento",
+      "description": "Scambia il bonus di attacco con un bonus di schivata alla CA.",
+      "prerequisite": "Int 13"
+    },
+    "combatReflexes": { "name": "Riflessi in Combattimento", "description": "Attacchi di opportunità extra per round." },
+    "deadlyAim": {
+      "name": "Mira Letale",
+      "description": "Scambia una penalità all'attacco a distanza con danno extra.",
+      "prerequisite": "Des 13, Sparo Mirato"
+    },
+    "deceitful": { "name": "Ingannevole", "description": "+2 a Raggirare e Camuffare." },
+    "deflectArrows": {
+      "name": "Deviare le Frecce",
+      "description": "Devia un attacco con arma a distanza per round come se avessi uno scudo.",
+      "prerequisite": "Des 13, Attacco Non Armato Migliorato"
+    },
+    "diehard": {
+      "name": "Indomabile",
+      "description": "Ti stabilizzi automaticamente e puoi agire mentre sei a punti ferita negativi.",
+      "prerequisite": "Resistenza"
+    },
+    "dodge": { "name": "Schivare", "description": "+1 bonus di schivata alla CA.", "prerequisite": "Des 13" },
+    "endurance": { "name": "Resistenza", "description": "+4 alle prove per resistere a danno non letale e affaticamento." },
+    "greatCleave": {
+      "name": "Grande Rasoiata",
+      "description": "Come Rasoiata, senza limite al numero di attacchi extra per round.",
+      "prerequisite": "For 13, Rasoiata, Attacco Poderoso, BAB +4"
+    },
+    "greatFortitude": { "name": "Grande Tempra", "description": "+2 ai TS su Tempra." },
+    "improvedBullRush": {
+      "name": "Spinta Migliorata",
+      "description": "Nessun attacco di opportunità quando spingi; +2 alla prova.",
+      "prerequisite": "For 13, Attacco Poderoso"
+    },
+    "improvedCounterspell": {
+      "name": "Controincantesimo Migliorato",
+      "description": "Contrasta un incantesimo con uno della stessa scuola, non solo lo stesso incantesimo."
+    },
+    "improvedCritical": {
+      "name": "Critico Migliorato",
+      "description": "Raddoppia il range di minaccia di un'arma.",
+      "prerequisite": "BAB +8"
+    },
+    "improvedDisarm": {
+      "name": "Disarmare Migliorato",
+      "description": "Nessun attacco di opportunità quando disarmi; +2 alla prova.",
+      "prerequisite": "Int 13, Competenza in Combattimento"
+    },
+    "improvedFeint": {
+      "name": "Finta Migliorata",
+      "description": "Effettua una finta come azione di movimento invece che standard.",
+      "prerequisite": "Int 13, Competenza in Combattimento"
+    },
+    "improvedGrapple": {
+      "name": "Agganciare Migliorato",
+      "description": "Nessun attacco di opportunità quando agganci; +2 alla prova.",
+      "prerequisite": "Des 13, Attacco Non Armato Migliorato"
+    },
+    "improvedInitiative": { "name": "Iniziativa Migliorata", "description": "+4 all'Iniziativa." },
+    "improvedOverrun": {
+      "name": "Travolgere Migliorato",
+      "description": "Nessun attacco di opportunità quando travolgi; +2 alla prova.",
+      "prerequisite": "For 13, Attacco Poderoso"
+    },
+    "improvedShieldBash": {
+      "name": "Colpo di Scudo Migliorato",
+      "description": "Mantieni il bonus alla CA dello scudo quando lo usi per colpire.",
+      "prerequisite": "Competenza nello Scudo"
+    },
+    "improvedSunder": {
+      "name": "Spezzare Migliorato",
+      "description": "Nessun attacco di opportunità quando spezzi un oggetto; +2 alla prova.",
+      "prerequisite": "For 13, Attacco Poderoso"
+    },
+    "improvedTrip": {
+      "name": "Sgambetto Migliorato",
+      "description": "Nessun attacco di opportunità quando fai lo sgambetto; +2 alla prova.",
+      "prerequisite": "Int 13, Competenza in Combattimento"
+    },
+    "improvedTwoWeaponFighting": {
+      "name": "Combattere con Due Armi Migliorato",
+      "description": "Ottieni un secondo attacco con la mano secondaria con -5.",
+      "prerequisite": "Des 17, Combattere con Due Armi, BAB +6"
+    },
+    "improvedUnarmedStrike": {
+      "name": "Attacco Non Armato Migliorato",
+      "description": "Gli attacchi non armati contano come arma e non provocano attacchi di opportunità."
+    },
+    "ironWill": { "name": "Volontà di Ferro", "description": "+2 ai TS su Volontà." },
+    "lightningReflexes": { "name": "Riflessi Fulminei", "description": "+2 ai TS su Riflessi." },
+    "manyshot": {
+      "name": "Tiro Multiplo",
+      "description": "Spara due frecce con un solo attacco al bonus più alto.",
+      "prerequisite": "Des 17, Sparo Mirato, Tiro Rapido, BAB +6"
+    },
+    "mobility": {
+      "name": "Mobilità",
+      "description": "+4 alla CA contro attacchi di opportunità dovuti al movimento.",
+      "prerequisite": "Des 13, Schivare"
+    },
+    "mountedCombat": {
+      "name": "Combattimento in Sella",
+      "description": "Una volta per round, annulla un colpo contro la cavalcatura con una prova di Cavalcare.",
+      "prerequisite": "Cavalcare 1 grado"
+    },
+    "pointBlankShot": { "name": "Sparo Mirato", "description": "+1 ai tiri per colpire e al danno con armi a distanza entro 9 m." },
+    "powerAttack": {
+      "name": "Attacco Poderoso",
+      "description": "Scambia una penalità all'attacco in mischia con danno extra.",
+      "prerequisite": "For 13"
+    },
+    "preciseShot": {
+      "name": "Tiro Preciso",
+      "description": "Nessuna penalità per sparare in mischia.",
+      "prerequisite": "Sparo Mirato"
+    },
+    "rapidShot": {
+      "name": "Tiro Rapido",
+      "description": "Un attacco a distanza extra per round, con -2 a tutti gli attacchi.",
+      "prerequisite": "Des 13, Sparo Mirato"
+    },
+    "run": { "name": "Corsa", "description": "Corri a 5 volte la velocità normale (4 volte in armatura); +4 ad Acrobazia per la distanza di salto." },
+    "selfSufficient": { "name": "Autosufficiente", "description": "+2 a Curare e Sopravvivenza." },
+    "shotOnTheRun": {
+      "name": "Sparare in Movimento",
+      "description": "Muoviti, spara un attacco a distanza, poi muoviti di nuovo.",
+      "prerequisite": "Des 13, Schivare, Mobilità, Sparo Mirato, BAB +4"
+    },
+    "skillFocus": { "name": "Focus nell'Abilità", "description": "+3 (o +6 con 10 gradi) a un'abilità scelta." },
+    "springAttack": {
+      "name": "Attacco Balzano",
+      "description": "Avvicinati, attacca e allontanati senza provocare attacchi di opportunità.",
+      "prerequisite": "Des 13, Schivare, Mobilità, BAB +4"
+    },
+    "stealthy": { "name": "Furtivo", "description": "+2 a Furtività e Fuga." },
+    "toughness": { "name": "Robustezza", "description": "+3 punti ferita, +1 in più per livello dopo il 3°." },
+    "twoWeaponFighting": {
+      "name": "Combattere con Due Armi",
+      "description": "Riduce le penalità del combattere con due armi.",
+      "prerequisite": "Des 15"
+    },
+    "vitalStrike": {
+      "name": "Colpo Vitale",
+      "description": "Tira un'altra volta i dadi danno dell'arma su un singolo attacco.",
+      "prerequisite": "BAB +6"
+    },
+    "weaponFinesse": {
+      "name": "Precisione nelle Armi",
+      "description": "Usa la Destrezza invece della Forza nei tiri per colpire con armi leggere."
+    },
+    "weaponFocus": {
+      "name": "Focus nell'Arma",
+      "description": "+1 ai tiri per colpire con un'arma scelta.",
+      "prerequisite": "Competenza con l'arma"
+    }
+  },
+  "spell": {
+    "detectMagic": { "name": "Individuazione del Magico", "description": "Rileva incantesimi e oggetti magici nelle vicinanze." },
+    "light": { "name": "Luce", "description": "Un oggetto risplende come una torcia." },
+    "readMagic": { "name": "Leggere il Magico", "description": "Permette di leggere pergamene e libri degli incantesimi." },
+    "prestidigitation": { "name": "Prestidigitazione", "description": "Esegue piccoli trucchi magici." },
+    "rayOfFrost": { "name": "Raggio di Gelo", "description": "Un raggio infligge 1d3 danni da freddo." },
+    "acidSplash": { "name": "Spruzzo Acido", "description": "Un attacco di contatto a distanza infligge 1d3 danni da acido." },
+    "message": { "name": "Messaggio", "description": "Conversazione sussurrata a distanza." },
+    "dancingLights": { "name": "Luci Danzanti", "description": "Crea fino a quattro luci fluttuanti." },
+    "mending": { "name": "Aggiustare", "description": "Ripara una piccola rottura o strappo." },
+    "stabilize": { "name": "Stabilizzare", "description": "Stabilizza una creatura morente." },
+    "guidance": { "name": "Guida", "description": "+1 a un tiro per colpire, TS o prova di abilità." },
+    "resistance": { "name": "Resistenza", "description": "+1 di resistenza ai tiri salvezza." },
+    "magicMissile": { "name": "Missile Magico", "description": "Dardi infallibili infliggono ciascuno 1d4+1 danni da forza." },
+    "mageArmor": { "name": "Armatura del Mago", "description": "+4 bonus di armatura alla CA." },
+    "shield": { "name": "Scudo", "description": "+4 bonus scudo alla CA, blocca il missile magico." },
+    "charmPerson": { "name": "Ammaliare Persone", "description": "Rende un umanoide un tuo fidato amico." },
+    "sleep": { "name": "Sonno", "description": "Fa cadere in un sonno magico creature fino a 4 DV." },
+    "grease": { "name": "Untume", "description": "Rende scivolosa una superficie o un oggetto." },
+    "silentImage": { "name": "Immagine Silente", "description": "Crea un'immagine illusoria in movimento." },
+    "summonMonsterI": { "name": "Evocare Mostri I", "description": "Evoca un fuoripiano che combatte per te." },
+    "protectionFromEvil": {
+      "name": "Protezione dal Male",
+      "description": "+2 a CA/TS contro il male, blocca il controllo mentale da creature malvagie."
+    },
+    "obscuringMist": { "name": "Nebbia Offuscante", "description": "Una nebbia ti circonda, bloccando la vista." },
+    "longstrider": { "name": "Falcata Lunga", "description": "+3 m alla velocità." },
+    "jump": { "name": "Salto", "description": "Concede un bonus alle prove di Acrobazia per saltare." },
+    "cureLightWounds": { "name": "Curare Ferite Leggere", "description": "Cura 1d8+ punti ferita." },
+    "bless": { "name": "Benedizione", "description": "Gli alleati ottengono +1 ai tiri per colpire e +1 ai TS contro la paura." },
+    "shieldOfFaith": { "name": "Scudo della Fede", "description": "Bonus di deviazione alla CA." },
+    "command": { "name": "Comando", "description": "Una creatura obbedisce a un comando di una sola parola." },
+    "doom": { "name": "Sventura", "description": "Una creatura subisce una penalità ad attacchi, danni, TS e prove." },
+    "entangle": { "name": "Groviglio", "description": "Le piante intrappolano tutti nell'area." },
+    "faerieFire": { "name": "Fuoco Fatuo", "description": "Delinea i soggetti di luce, negando l'occultamento." }
+  },
+  "weapon": {
+    "dagger": "Pugnale",
+    "club": "Clava",
+    "quarterstaff": "Bastone",
+    "sling": "Fionda",
+    "lightMace": "Mazza Leggera",
+    "heavyMace": "Mazza Pesante",
+    "spear": "Lancia",
+    "longsword": "Spada Lunga",
+    "battleaxe": "Ascia da Battaglia",
+    "warhammer": "Martello da Guerra",
+    "rapier": "Stocco",
+    "shortsword": "Spada Corta",
+    "greatsword": "Spadone",
+    "greataxe": "Ascia Grande",
+    "handaxe": "Accetta",
+    "scimitar": "Scimitarra",
+    "longbow": "Arco Lungo",
+    "shortbow": "Arco Corto",
+    "heavyCrossbow": "Balestra Pesante",
+    "lightCrossbow": "Balestra Leggera",
+    "bastardSword": "Spada Bastarda",
+    "kukri": "Kukri",
+    "spikedChain": "Catena Chiodata",
+    "whip": "Frusta"
+  },
+  "armor": {
+    "padded": "Imbottita",
+    "leather": "Cuoio",
+    "studdedLeather": "Cuoio Borchiato",
+    "chainShirt": "Camicia di Maglia",
+    "hide": "Pelle",
+    "scaleMail": "Corazza a Scaglie",
+    "chainmail": "Cotta di Maglia",
+    "breastplate": "Corazza",
+    "bandedMail": "Armatura a Bande",
+    "halfPlate": "Mezza Piastra",
+    "fullPlate": "Armatura Completa",
+    "buckler": "Rotella",
+    "lightWoodenShield": "Scudo di Legno Leggero",
+    "heavyWoodenShield": "Scudo di Legno Pesante",
+    "lightSteelShield": "Scudo d'Acciaio Leggero",
+    "heavySteelShield": "Scudo d'Acciaio Pesante",
+    "towerShield": "Scudo Torre"
+  },
+  "gear": {
+    "backpack": "Zaino",
+    "bedroll": "Sacco a Pelo",
+    "silkRope50ft": "Corda di Seta (15 m)",
+    "hempRope50ft": "Corda di Canapa (15 m)",
+    "torch": "Torcia",
+    "waterskin": "Otre",
+    "trailRationsPerDay": "Razioni da Viaggio (al giorno)",
+    "grapplingHook": "Rampino",
+    "crowbar": "Piede di Porco",
+    "flintAndSteel": "Acciarino",
+    "hoodedLantern": "Lanterna a Manicotto",
+    "oilFlask": "Olio (fiaschetta)",
+    "thievesTools": "Ferri da Scasso",
+    "healersKit": "Kit del Guaritore",
+    "signalWhistle": "Fischietto di Segnalazione",
+    "chalk": "Gesso (1 pezzo)",
+    "manacles": "Manette"
+  },
+  "companionBase": {
+    "wolf": "Lupo",
+    "dog": "Cane",
+    "cat": "Gatto",
+    "eagle": "Aquila",
+    "lightHorse": "Cavallo Leggero",
+    "pony": "Pony",
+    "raven": "Corvo",
+    "owl": "Gufo",
+    "toad": "Rospo",
+    "rat": "Ratto",
+    "bat": "Pipistrello"
+  },
+  "companionAttack": {
+    "wolf": "Morso 1d6",
+    "dog": "Morso 1d6",
+    "cat": "Morso 1d2, 2 artigli 1d2",
+    "eagle": "2 artigli 1d4",
+    "horse": "2 zoccoli 1d4",
+    "catFamiliar": "Morso 1d3",
+    "raven": "Morso 1d3",
+    "owl": "2 artigli 1d4",
+    "toad": "Morso 1",
+    "rat": "Morso 1",
+    "bat": "Morso 1d3"
+  },
+  "companionQuality": {
+    "wolfTrip": "Sgambetto: un morso che colpisce può tentare di far cadere il bersaglio",
+    "flyGood": "Velocità di volo con manovrabilità buona",
+    "grantsStealth": "Il padrone ottiene +3 a Furtività",
+    "grantsAppraise": "Il padrone ottiene +3 a Valutare",
+    "grantsPerceptionDark": "Il padrone ottiene +3 a Percezione in ombra o oscurità",
+    "grantsMaxHp": "Il padrone ottiene +1 punto ferita per livello del padrone",
+    "grantsFortitude": "Il padrone ottiene +3 ai TS su Tempra",
+    "grantsBlindsense": "Il padrone ottiene Percezione Cieca 3 m"
+  }
+}

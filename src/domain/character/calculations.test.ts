@@ -1,0 +1,133 @@
+import { describe, expect, it } from "vitest";
+import { createDefaultAbilityScores } from "@/domain/shared/abilities";
+import { createDefaultDefenseLoadout } from "@/domain/shared/creature";
+import type { ClassDefinition, SkillDefinition } from "@/content/types";
+import {
+  deriveSkillTotals,
+  resolveBaseAttackBonus,
+  resolveBaseSaves,
+  skillPointsForLevel,
+  type ClassLookup,
+  type SkillLookup,
+} from "./calculations";
+import type { PlayerCharacter } from "./types";
+
+const fighter: ClassDefinition = {
+  id: "fighter",
+  nameKey: "srd:class.fighter.name",
+  hitDie: 10,
+  babProgression: "full",
+  saveProgressions: { fort: "good", ref: "poor", will: "poor" },
+  skillPointsPerLevel: 2,
+  classSkillIds: ["climb", "intimidate"],
+  isSpellcaster: false,
+  features: [],
+};
+
+const wizard: ClassDefinition = {
+  id: "wizard",
+  nameKey: "srd:class.wizard.name",
+  hitDie: 6,
+  babProgression: "half",
+  saveProgressions: { fort: "poor", ref: "poor", will: "good" },
+  skillPointsPerLevel: 2,
+  classSkillIds: ["spellcraft", "knowledgeArcana"],
+  isSpellcaster: true,
+  spellcastingAbility: "int",
+  features: [],
+};
+
+const classesById: ClassLookup = { fighter, wizard };
+
+const climb: SkillDefinition = {
+  id: "climb",
+  nameKey: "srd:skill.climb.name",
+  keyAbility: "str",
+  trainedOnly: false,
+  armorCheckPenalty: true,
+};
+
+const skillsById: SkillLookup = { climb };
+
+function baseCharacter(overrides: Partial<PlayerCharacter> = {}): PlayerCharacter {
+  return {
+    id: "char-1",
+    schemaVersion: 1,
+    name: "Test",
+    playerName: "",
+    raceId: "human",
+    alignment: "",
+    deity: "",
+    size: "medium",
+    classLevels: [],
+    abilityScores: createDefaultAbilityScores(10),
+    hitPoints: { max: 1, current: 1, nonLethal: 0 },
+    defense: createDefaultDefenseLoadout(),
+    skills: [],
+    feats: [],
+    traits: [],
+    inventory: [],
+    spells: [],
+    companions: [],
+    notes: "",
+    createdAt: "",
+    updatedAt: "",
+    ...overrides,
+  };
+}
+
+describe("multiclass BAB/saves", () => {
+  it("sums each class's own progression rather than using total level", () => {
+    const character = baseCharacter({
+      classLevels: [
+        { classId: "fighter", level: 3 },
+        { classId: "wizard", level: 2 },
+      ],
+    });
+
+    // fighter(3) full = 3, wizard(2) half = 1 -> 4
+    expect(resolveBaseAttackBonus(character, classesById)).toBe(4);
+
+    const saves = resolveBaseSaves(character, classesById);
+    // fort: fighter good(3)=3 + wizard poor(2)=0 -> 3
+    expect(saves.fort).toBe(3);
+    // will: fighter poor(3)=1 + wizard good(2)=3 -> 4
+    expect(saves.will).toBe(4);
+  });
+});
+
+describe("deriveSkillTotals", () => {
+  it("adds the +3 class skill bonus only when ranks are invested", () => {
+    const character = baseCharacter({
+      classLevels: [{ classId: "fighter", level: 1 }],
+      abilityScores: { ...createDefaultAbilityScores(10), str: 14 },
+      skills: [{ skillId: "climb", ranks: 2, miscModifier: 0 }],
+    });
+
+    const [total] = deriveSkillTotals(character, classesById, skillsById);
+    // ranks(2) + strMod(2) + classSkill(3) - armorCheckPenalty(0) = 7
+    expect(total?.total).toBe(7);
+    expect(total?.isClassSkill).toBe(true);
+  });
+
+  it("applies the armor check penalty when the skill is affected", () => {
+    const character = baseCharacter({
+      classLevels: [{ classId: "fighter", level: 1 }],
+      defense: { ...createDefaultDefenseLoadout(), armorCheckPenalty: 2 },
+      skills: [{ skillId: "climb", ranks: 0, miscModifier: 0 }],
+    });
+
+    const [total] = deriveSkillTotals(character, classesById, skillsById);
+    expect(total?.total).toBe(0 + 0 + 0 - 2);
+  });
+});
+
+describe("skillPointsForLevel", () => {
+  it("never drops below 1 even with a negative Int modifier", () => {
+    expect(skillPointsForLevel(fighter, -4)).toBe(1);
+  });
+
+  it("adds the Int modifier to the class base", () => {
+    expect(skillPointsForLevel(wizard, 3)).toBe(5);
+  });
+});

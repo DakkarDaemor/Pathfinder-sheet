@@ -1,0 +1,68 @@
+import type { FeatDefinition } from "./types";
+
+function feat(id: string, type: FeatDefinition["type"], hasPrerequisite = false): FeatDefinition {
+  return {
+    id,
+    nameKey: `srd:feat.${id}.name`,
+    descriptionKey: `srd:feat.${id}.description`,
+    prerequisiteKey: hasPrerequisite ? `srd:feat.${id}.prerequisite` : null,
+    type,
+  };
+}
+
+/** ~50 common Core Rulebook feats (Open Game Content) — a starter set meant to grow over time. */
+export const FEATS: FeatDefinition[] = [
+  feat("acrobatic", "general"),
+  feat("agileManeuvers", "combat"),
+  feat("alertness", "general"),
+  feat("animalAffinity", "general"),
+  feat("athletic", "general"),
+  feat("blindFight", "combat"),
+  feat("cleave", "combat", true),
+  feat("combatCasting", "general"),
+  feat("combatExpertise", "combat", true),
+  feat("combatReflexes", "combat"),
+  feat("deadlyAim", "combat", true),
+  feat("deceitful", "general"),
+  feat("deflectArrows", "combat", true),
+  feat("diehard", "general", true),
+  feat("dodge", "combat", true),
+  feat("endurance", "general"),
+  feat("greatCleave", "combat", true),
+  feat("greatFortitude", "general"),
+  feat("improvedBullRush", "combat", true),
+  feat("improvedCounterspell", "combat"),
+  feat("improvedCritical", "combat", true),
+  feat("improvedDisarm", "combat", true),
+  feat("improvedFeint", "combat", true),
+  feat("improvedGrapple", "combat", true),
+  feat("improvedInitiative", "combat"),
+  feat("improvedOverrun", "combat", true),
+  feat("improvedShieldBash", "combat", true),
+  feat("improvedSunder", "combat", true),
+  feat("improvedTrip", "combat", true),
+  feat("improvedTwoWeaponFighting", "combat", true),
+  feat("improvedUnarmedStrike", "combat"),
+  feat("ironWill", "general"),
+  feat("lightningReflexes", "general"),
+  feat("manyshot", "combat", true),
+  feat("mobility", "combat", true),
+  feat("mountedCombat", "combat", true),
+  feat("pointBlankShot", "combat"),
+  feat("powerAttack", "combat", true),
+  feat("preciseShot", "combat", true),
+  feat("rapidShot", "combat", true),
+  feat("run", "general"),
+  feat("selfSufficient", "general"),
+  feat("shotOnTheRun", "combat", true),
+  feat("skillFocus", "general"),
+  feat("springAttack", "combat", true),
+  feat("stealthy", "general"),
+  feat("toughness", "general"),
+  feat("twoWeaponFighting", "combat", true),
+  feat("vitalStrike", "combat", true),
+  feat("weaponFinesse", "combat"),
+  feat("weaponFocus", "combat", true),
+];
+
+export const FEATS_BY_ID: Record<string, FeatDefinition> = Object.fromEntries(FEATS.map((f) => [f.id, f]));

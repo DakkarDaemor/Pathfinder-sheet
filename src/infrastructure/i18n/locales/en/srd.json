@@ -1,0 +1,547 @@
+{
+  "alignment": {
+    "lg": "Lawful Good",
+    "ng": "Neutral Good",
+    "cg": "Chaotic Good",
+    "ln": "Lawful Neutral",
+    "n": "True Neutral",
+    "cn": "Chaotic Neutral",
+    "le": "Lawful Evil",
+    "ne": "Neutral Evil",
+    "ce": "Chaotic Evil"
+  },
+  "size": {
+    "fine": "Fine",
+    "diminutive": "Diminutive",
+    "tiny": "Tiny",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "huge": "Huge",
+    "gargantuan": "Gargantuan",
+    "colossal": "Colossal"
+  },
+  "race": {
+    "dwarf": "Dwarf",
+    "elf": "Elf",
+    "gnome": "Gnome",
+    "halfElf": "Half-Elf",
+    "halfOrc": "Half-Orc",
+    "halfling": "Halfling",
+    "human": "Human"
+  },
+  "raceTrait": {
+    "darkvision60": "Darkvision 60 ft.",
+    "defensiveTraining": "Defensive Training: dodge bonus to AC against giants",
+    "hatred": "Hatred: +1 attack vs. a favored enemy race",
+    "hardy": "Hardy: +2 saves vs. poison, spells and spell-like abilities",
+    "stability": "Stability: +4 CMD vs. bull rush/trip while standing on the ground",
+    "greed": "Greed: +2 Appraise on items made of precious metal/gems",
+    "stonecunning": "Stonecunning: +2 Perception vs. unusual stonework",
+    "dwarfWeaponFamiliarity": "Weapon Familiarity: dwarven waraxe, urgrosh",
+    "slowAndSteady": "Slow and Steady: speed never reduced by armor or encumbrance",
+    "lowLightVision": "Low-Light Vision",
+    "elvenImmunities": "Elven Immunities: immune to sleep, +2 saves vs. enchantment",
+    "keenSenses": "Keen Senses: +2 Perception",
+    "elvenMagic": "Elven Magic: +2 vs. spell resistance checks, +2 Spellcraft to identify magic items",
+    "elfWeaponFamiliarity": "Weapon Familiarity: longbow, longsword, rapier, shortbow",
+    "gnomeMagic": "Gnome Magic: bonus spell-like abilities, +1 DC on illusion spells",
+    "illusionResistance": "Illusion Resistance: +2 saves vs. illusions",
+    "obsessive": "Obsessive: +2 to one Craft or Profession skill",
+    "adaptability": "Adaptability: gains Skill Focus as a bonus feat at 1st level",
+    "elfBlood": "Elf Blood: counts as both elf and human",
+    "multitalented": "Multitalented: counts two favored classes",
+    "intimidatingRace": "Intimidating: +2 Intimidate",
+    "orcBlood": "Orc Blood: counts as both orc and human",
+    "orcFerocity": "Orc Ferocity: once per day, fight on for one more round below 0 hp",
+    "halfOrcWeaponFamiliarity": "Weapon Familiarity: falchion, orc double axe",
+    "fearless": "Fearless: +2 saves vs. fear",
+    "halflingLuck": "Halfling Luck: +1 on all saving throws",
+    "sureFooted": "Sure-Footed: +2 Acrobatics and Climb",
+    "halflingWeaponFamiliarity": "Weapon Familiarity: sling",
+    "bonusFeat": "Bonus Feat at 1st level",
+    "skilled": "Skilled: +1 skill rank per level"
+  },
+  "class": {
+    "barbarian": "Barbarian",
+    "bard": "Bard",
+    "cleric": "Cleric",
+    "druid": "Druid",
+    "fighter": "Fighter",
+    "monk": "Monk",
+    "paladin": "Paladin",
+    "ranger": "Ranger",
+    "rogue": "Rogue",
+    "sorcerer": "Sorcerer",
+    "wizard": "Wizard"
+  },
+  "classFeature": {
+    "barbarian": {
+      "fastMovement": "Fast Movement",
+      "rage": "Rage",
+      "ragePower": "Rage Power",
+      "uncannyDodge": "Uncanny Dodge",
+      "trapSense": "Trap Sense",
+      "improvedUncannyDodge": "Improved Uncanny Dodge",
+      "damageReduction": "Damage Reduction",
+      "greaterRage": "Greater Rage",
+      "tirelessRage": "Tireless Rage",
+      "mightyRage": "Mighty Rage"
+    },
+    "bard": {
+      "bardicKnowledge": "Bardic Knowledge",
+      "bardicPerformance": "Bardic Performance",
+      "versatilePerformance": "Versatile Performance",
+      "inspireCompetence": "Inspire Competence",
+      "suggestion": "Suggestion",
+      "dirgeOfDoom": "Dirge of Doom",
+      "inspireGreatness": "Inspire Greatness",
+      "soothingPerformance": "Soothing Performance",
+      "inspireHeroics": "Inspire Heroics",
+      "massSuggestion": "Mass Suggestion",
+      "deadlyPerformance": "Deadly Performance"
+    },
+    "cleric": {
+      "channelEnergy": "Channel Energy",
+      "domains": "Domains",
+      "spontaneousCasting": "Spontaneous Casting"
+    },
+    "druid": {
+      "natureBond": "Nature Bond",
+      "natureSense": "Nature Sense",
+      "wildEmpathy": "Wild Empathy",
+      "woodlandStride": "Woodland Stride",
+      "tracklessStep": "Trackless Step",
+      "resistNaturesLure": "Resist Nature's Lure",
+      "wildShape": "Wild Shape",
+      "venomImmunity": "Venom Immunity",
+      "thousandFaces": "A Thousand Faces",
+      "timelessBody": "Timeless Body"
+    },
+    "fighter": {
+      "bonusFeat": "Bonus Feat",
+      "bravery": "Bravery",
+      "armorTraining": "Armor Training",
+      "weaponTraining": "Weapon Training",
+      "armorMastery": "Armor Mastery",
+      "weaponMastery": "Weapon Mastery"
+    },
+    "monk": {
+      "flurryOfBlows": "Flurry of Blows",
+      "improvedUnarmedStrike": "Improved Unarmed Strike",
+      "stunningFist": "Stunning Fist",
+      "acBonus": "AC Bonus",
+      "evasion": "Evasion",
+      "stillMind": "Still Mind",
+      "kiPool": "Ki Pool",
+      "purityOfBody": "Purity of Body",
+      "wholenessOfBody": "Wholeness of Body",
+      "improvedEvasion": "Improved Evasion",
+      "diamondBody": "Diamond Body",
+      "diamondSoul": "Diamond Soul",
+      "quiveringPalm": "Quivering Palm",
+      "timelessBody": "Timeless Body",
+      "emptyBody": "Empty Body",
+      "perfectSelf": "Perfect Self"
+    },
+    "paladin": {
+      "auraOfGood": "Aura of Good",
+      "detectEvil": "Detect Evil",
+      "smiteEvil": "Smite Evil",
+      "divineGrace": "Divine Grace",
+      "layOnHands": "Lay on Hands",
+      "auraOfCourage": "Aura of Courage",
+      "divineHealth": "Divine Health",
+      "divineBond": "Divine Bond",
+      "auraOfResolve": "Aura of Resolve",
+      "auraOfJustice": "Aura of Justice",
+      "auraOfFaith": "Aura of Faith",
+      "auraOfRighteousness": "Aura of Righteousness",
+      "holyChampion": "Holy Champion"
+    },
+    "ranger": {
+      "favoredEnemy": "Favored Enemy",
+      "track": "Track",
+      "wildEmpathy": "Wild Empathy",
+      "combatStyleFeat": "Combat Style Feat",
+      "favoredTerrain": "Favored Terrain",
+      "huntersBond": "Hunter's Bond",
+      "swiftTracker": "Swift Tracker",
+      "evasion": "Evasion",
+      "camouflage": "Camouflage",
+      "hideInPlainSight": "Hide in Plain Sight"
+    },
+    "rogue": {
+      "sneakAttack": "Sneak Attack",
+      "trapfinding": "Trapfinding",
+      "rogueTalent": "Rogue Talent",
+      "evasion": "Evasion",
+      "trapSense": "Trap Sense",
+      "uncannyDodge": "Uncanny Dodge",
+      "improvedUncannyDodge": "Improved Uncanny Dodge",
+      "advancedTalents": "Advanced Talents",
+      "masterStrike": "Master Strike"
+    },
+    "sorcerer": {
+      "bloodline": "Bloodline",
+      "bloodlineArcana": "Bloodline Arcana",
+      "eschewMaterials": "Eschew Materials",
+      "bloodlineFeat": "Bloodline Feat"
+    },
+    "wizard": {
+      "arcaneBond": "Arcane Bond",
+      "arcaneSchool": "Arcane School",
+      "scribeScroll": "Scribe Scroll",
+      "bonusFeat": "Bonus Feat"
+    }
+  },
+  "skill": {
+    "acrobatics": "Acrobatics",
+    "appraise": "Appraise",
+    "bluff": "Bluff",
+    "climb": "Climb",
+    "craft": "Craft",
+    "diplomacy": "Diplomacy",
+    "disableDevice": "Disable Device",
+    "disguise": "Disguise",
+    "escapeArtist": "Escape Artist",
+    "fly": "Fly",
+    "handleAnimal": "Handle Animal",
+    "heal": "Heal",
+    "intimidate": "Intimidate",
+    "knowledgeArcana": "Knowledge (arcana)",
+    "knowledgeDungeoneering": "Knowledge (dungeoneering)",
+    "knowledgeEngineering": "Knowledge (engineering)",
+    "knowledgeGeography": "Knowledge (geography)",
+    "knowledgeHistory": "Knowledge (history)",
+    "knowledgeLocal": "Knowledge (local)",
+    "knowledgeNature": "Knowledge (nature)",
+    "knowledgeNobility": "Knowledge (nobility)",
+    "knowledgePlanes": "Knowledge (planes)",
+    "knowledgeReligion": "Knowledge (religion)",
+    "linguistics": "Linguistics",
+    "perception": "Perception",
+    "perform": "Perform",
+    "profession": "Profession",
+    "ride": "Ride",
+    "senseMotive": "Sense Motive",
+    "sleightOfHand": "Sleight of Hand",
+    "spellcraft": "Spellcraft",
+    "stealth": "Stealth",
+    "survival": "Survival",
+    "swim": "Swim",
+    "useMagicDevice": "Use Magic Device"
+  },
+  "feat": {
+    "acrobatic": { "name": "Acrobatic", "description": "+2 Acrobatics and Fly." },
+    "agileManeuvers": {
+      "name": "Agile Maneuvers",
+      "description": "Use Dex modifier instead of Str for combat maneuver checks."
+    },
+    "alertness": { "name": "Alertness", "description": "+2 Perception and Sense Motive." },
+    "animalAffinity": { "name": "Animal Affinity", "description": "+2 Handle Animal and Ride." },
+    "athletic": { "name": "Athletic", "description": "+2 Climb and Swim." },
+    "blindFight": {
+      "name": "Blind-Fight",
+      "description": "Reroll miss chance from concealment; enemies get no bonus vs. you when you're blinded."
+    },
+    "cleave": {
+      "name": "Cleave",
+      "description": "Extra melee attack against an adjacent foe after downing one.",
+      "prerequisite": "Str 13, Power Attack"
+    },
+    "combatCasting": {
+      "name": "Combat Casting",
+      "description": "+4 concentration checks to cast defensively or while grappled."
+    },
+    "combatExpertise": {
+      "name": "Combat Expertise",
+      "description": "Trade attack bonus for a dodge bonus to AC.",
+      "prerequisite": "Int 13"
+    },
+    "combatReflexes": { "name": "Combat Reflexes", "description": "Extra attacks of opportunity per round." },
+    "deadlyAim": {
+      "name": "Deadly Aim",
+      "description": "Trade a ranged attack penalty for extra damage.",
+      "prerequisite": "Dex 13, Point-Blank Shot"
+    },
+    "deceitful": { "name": "Deceitful", "description": "+2 Bluff and Disguise." },
+    "deflectArrows": {
+      "name": "Deflect Arrows",
+      "description": "Deflect one ranged weapon attack per round as if with a shield.",
+      "prerequisite": "Dex 13, Improved Unarmed Strike"
+    },
+    "diehard": {
+      "name": "Diehard",
+      "description": "Automatically stabilize and can act while at negative hp.",
+      "prerequisite": "Endurance"
+    },
+    "dodge": { "name": "Dodge", "description": "+1 dodge bonus to AC.", "prerequisite": "Dex 13" },
+    "endurance": { "name": "Endurance", "description": "+4 on checks to resist nonlethal damage and fatigue." },
+    "greatCleave": {
+      "name": "Great Cleave",
+      "description": "Cleave with no limit on the number of extra attacks per round.",
+      "prerequisite": "Str 13, Cleave, Power Attack, base attack bonus +4"
+    },
+    "greatFortitude": { "name": "Great Fortitude", "description": "+2 Fortitude saves." },
+    "improvedBullRush": {
+      "name": "Improved Bull Rush",
+      "description": "No attack of opportunity when bull rushing; +2 on the check.",
+      "prerequisite": "Str 13, Power Attack"
+    },
+    "improvedCounterspell": {
+      "name": "Improved Counterspell",
+      "description": "Counter a spell with one of the same school, not just the same spell."
+    },
+    "improvedCritical": {
+      "name": "Improved Critical",
+      "description": "Double the threat range of one weapon.",
+      "prerequisite": "Base attack bonus +8"
+    },
+    "improvedDisarm": {
+      "name": "Improved Disarm",
+      "description": "No attack of opportunity when disarming; +2 on the check.",
+      "prerequisite": "Int 13, Combat Expertise"
+    },
+    "improvedFeint": {
+      "name": "Improved Feint",
+      "description": "Feint as a move action instead of a standard action.",
+      "prerequisite": "Int 13, Combat Expertise"
+    },
+    "improvedGrapple": {
+      "name": "Improved Grapple",
+      "description": "No attack of opportunity when grappling; +2 on the check.",
+      "prerequisite": "Dex 13, Improved Unarmed Strike"
+    },
+    "improvedInitiative": { "name": "Improved Initiative", "description": "+4 Initiative." },
+    "improvedOverrun": {
+      "name": "Improved Overrun",
+      "description": "No attack of opportunity when overrunning; +2 on the check.",
+      "prerequisite": "Str 13, Power Attack"
+    },
+    "improvedShieldBash": {
+      "name": "Improved Shield Bash",
+      "description": "Keep your shield's AC bonus when shield bashing.",
+      "prerequisite": "Shield Proficiency"
+    },
+    "improvedSunder": {
+      "name": "Improved Sunder",
+      "description": "No attack of opportunity when sundering; +2 on the check.",
+      "prerequisite": "Str 13, Power Attack"
+    },
+    "improvedTrip": {
+      "name": "Improved Trip",
+      "description": "No attack of opportunity when tripping; +2 on the check.",
+      "prerequisite": "Int 13, Combat Expertise"
+    },
+    "improvedTwoWeaponFighting": {
+      "name": "Improved Two-Weapon Fighting",
+      "description": "Gain a second off-hand attack at a -5 penalty.",
+      "prerequisite": "Dex 17, Two-Weapon Fighting, base attack bonus +6"
+    },
+    "improvedUnarmedStrike": {
+      "name": "Improved Unarmed Strike",
+      "description": "Unarmed strikes count as a weapon and never provoke."
+    },
+    "ironWill": { "name": "Iron Will", "description": "+2 Will saves." },
+    "lightningReflexes": { "name": "Lightning Reflexes", "description": "+2 Reflex saves." },
+    "manyshot": {
+      "name": "Manyshot",
+      "description": "Fire two arrows with one attack at the highest bonus.",
+      "prerequisite": "Dex 17, Point-Blank Shot, Rapid Shot, base attack bonus +6"
+    },
+    "mobility": {
+      "name": "Mobility",
+      "description": "+4 AC against attacks of opportunity from movement.",
+      "prerequisite": "Dex 13, Dodge"
+    },
+    "mountedCombat": {
+      "name": "Mounted Combat",
+      "description": "Once per round, negate a hit on your mount with a Ride check.",
+      "prerequisite": "Ride 1 rank"
+    },
+    "pointBlankShot": { "name": "Point-Blank Shot", "description": "+1 attack and damage with ranged weapons within 30 ft." },
+    "powerAttack": {
+      "name": "Power Attack",
+      "description": "Trade a melee attack penalty for extra damage.",
+      "prerequisite": "Str 13"
+    },
+    "preciseShot": {
+      "name": "Precise Shot",
+      "description": "No penalty for shooting into melee.",
+      "prerequisite": "Point-Blank Shot"
+    },
+    "rapidShot": {
+      "name": "Rapid Shot",
+      "description": "One extra ranged attack per round at -2 to all attacks.",
+      "prerequisite": "Dex 13, Point-Blank Shot"
+    },
+    "run": { "name": "Run", "description": "Run at 5x normal speed (4x in armor); +4 Acrobatics for jump distance." },
+    "selfSufficient": { "name": "Self-Sufficient", "description": "+2 Heal and Survival." },
+    "shotOnTheRun": {
+      "name": "Shot on the Run",
+      "description": "Move, fire a ranged attack, then move again.",
+      "prerequisite": "Dex 13, Dodge, Mobility, Point-Blank Shot, base attack bonus +4"
+    },
+    "skillFocus": { "name": "Skill Focus", "description": "+3 (or +6 at 10 ranks) to one chosen skill." },
+    "springAttack": {
+      "name": "Spring Attack",
+      "description": "Move in, attack, and move out without provoking.",
+      "prerequisite": "Dex 13, Dodge, Mobility, base attack bonus +4"
+    },
+    "stealthy": { "name": "Stealthy", "description": "+2 Stealth and Escape Artist." },
+    "toughness": { "name": "Toughness", "description": "+3 hit points, +1 more per level after 3rd." },
+    "twoWeaponFighting": {
+      "name": "Two-Weapon Fighting",
+      "description": "Reduces the two-weapon fighting penalties.",
+      "prerequisite": "Dex 15"
+    },
+    "vitalStrike": {
+      "name": "Vital Strike",
+      "description": "Roll one weapon's damage dice an extra time on a single attack.",
+      "prerequisite": "Base attack bonus +6"
+    },
+    "weaponFinesse": { "name": "Weapon Finesse", "description": "Use Dex instead of Str on attack rolls with light weapons." },
+    "weaponFocus": {
+      "name": "Weapon Focus",
+      "description": "+1 attack rolls with one chosen weapon.",
+      "prerequisite": "Proficiency with the weapon"
+    }
+  },
+  "spell": {
+    "detectMagic": { "name": "Detect Magic", "description": "Detects spells and magic items nearby." },
+    "light": { "name": "Light", "description": "Object shines like a torch." },
+    "readMagic": { "name": "Read Magic", "description": "Read scrolls and spellbooks." },
+    "prestidigitation": { "name": "Prestidigitation", "description": "Performs simple magical tricks." },
+    "rayOfFrost": { "name": "Ray of Frost", "description": "Ray deals 1d3 cold damage." },
+    "acidSplash": { "name": "Acid Splash", "description": "Ranged touch attack deals 1d3 acid damage." },
+    "message": { "name": "Message", "description": "Whispered conversation at a distance." },
+    "dancingLights": { "name": "Dancing Lights", "description": "Creates up to four floating lights." },
+    "mending": { "name": "Mending", "description": "Repairs a small break or tear." },
+    "stabilize": { "name": "Stabilize", "description": "Stabilizes a dying creature." },
+    "guidance": { "name": "Guidance", "description": "+1 on one attack roll, save, or skill check." },
+    "resistance": { "name": "Resistance", "description": "+1 resistance bonus on saving throws." },
+    "magicMissile": { "name": "Magic Missile", "description": "Unerring darts deal 1d4+1 force damage each." },
+    "mageArmor": { "name": "Mage Armor", "description": "+4 armor bonus to AC." },
+    "shield": { "name": "Shield", "description": "+4 shield bonus to AC, blocks magic missile." },
+    "charmPerson": { "name": "Charm Person", "description": "Makes one humanoid regard you as a trusted friend." },
+    "sleep": { "name": "Sleep", "description": "Puts 4 HD of creatures into a magical slumber." },
+    "grease": { "name": "Grease", "description": "Makes a surface or object slippery." },
+    "silentImage": { "name": "Silent Image", "description": "Creates a moving illusory image." },
+    "summonMonsterI": { "name": "Summon Monster I", "description": "Summons an outsider to fight for you." },
+    "protectionFromEvil": {
+      "name": "Protection from Evil",
+      "description": "+2 AC/saves vs. evil, blocks mental control by evil creatures."
+    },
+    "obscuringMist": { "name": "Obscuring Mist", "description": "Fog surrounds you, blocking sight." },
+    "longstrider": { "name": "Longstrider", "description": "+10 ft. to your speed." },
+    "jump": { "name": "Jump", "description": "Gives a bonus on Acrobatics checks made to jump." },
+    "cureLightWounds": { "name": "Cure Light Wounds", "description": "Cures 1d8+ hit points of damage." },
+    "bless": { "name": "Bless", "description": "Allies gain +1 attack rolls and +1 on saves vs. fear." },
+    "shieldOfFaith": { "name": "Shield of Faith", "description": "Deflection bonus to AC." },
+    "command": { "name": "Command", "description": "One creature obeys a single-word command." },
+    "doom": { "name": "Doom", "description": "One creature takes a penalty on attacks, damage, saves and checks." },
+    "entangle": { "name": "Entangle", "description": "Plants entangle everyone in the area." },
+    "faerieFire": { "name": "Faerie Fire", "description": "Outlines subjects in light, negating concealment." }
+  },
+  "weapon": {
+    "dagger": "Dagger",
+    "club": "Club",
+    "quarterstaff": "Quarterstaff",
+    "sling": "Sling",
+    "lightMace": "Light Mace",
+    "heavyMace": "Heavy Mace",
+    "spear": "Spear",
+    "longsword": "Longsword",
+    "battleaxe": "Battleaxe",
+    "warhammer": "Warhammer",
+    "rapier": "Rapier",
+    "shortsword": "Shortsword",
+    "greatsword": "Greatsword",
+    "greataxe": "Greataxe",
+    "handaxe": "Handaxe",
+    "scimitar": "Scimitar",
+    "longbow": "Longbow",
+    "shortbow": "Shortbow",
+    "heavyCrossbow": "Heavy Crossbow",
+    "lightCrossbow": "Light Crossbow",
+    "bastardSword": "Bastard Sword",
+    "kukri": "Kukri",
+    "spikedChain": "Spiked Chain",
+    "whip": "Whip"
+  },
+  "armor": {
+    "padded": "Padded",
+    "leather": "Leather",
+    "studdedLeather": "Studded Leather",
+    "chainShirt": "Chain Shirt",
+    "hide": "Hide",
+    "scaleMail": "Scale Mail",
+    "chainmail": "Chainmail",
+    "breastplate": "Breastplate",
+    "bandedMail": "Banded Mail",
+    "halfPlate": "Half-Plate",
+    "fullPlate": "Full Plate",
+    "buckler": "Buckler",
+    "lightWoodenShield": "Light Wooden Shield",
+    "heavyWoodenShield": "Heavy Wooden Shield",
+    "lightSteelShield": "Light Steel Shield",
+    "heavySteelShield": "Heavy Steel Shield",
+    "towerShield": "Tower Shield"
+  },
+  "gear": {
+    "backpack": "Backpack",
+    "bedroll": "Bedroll",
+    "silkRope50ft": "Silk Rope (50 ft.)",
+    "hempRope50ft": "Hemp Rope (50 ft.)",
+    "torch": "Torch",
+    "waterskin": "Waterskin",
+    "trailRationsPerDay": "Trail Rations (per day)",
+    "grapplingHook": "Grappling Hook",
+    "crowbar": "Crowbar",
+    "flintAndSteel": "Flint and Steel",
+    "hoodedLantern": "Hooded Lantern",
+    "oilFlask": "Oil (flask)",
+    "thievesTools": "Thieves' Tools",
+    "healersKit": "Healer's Kit",
+    "signalWhistle": "Signal Whistle",
+    "chalk": "Chalk (1 piece)",
+    "manacles": "Manacles"
+  },
+  "companionBase": {
+    "wolf": "Wolf",
+    "dog": "Dog",
+    "cat": "Cat",
+    "eagle": "Eagle",
+    "lightHorse": "Light Horse",
+    "pony": "Pony",
+    "raven": "Raven",
+    "owl": "Owl",
+    "toad": "Toad",
+    "rat": "Rat",
+    "bat": "Bat"
+  },
+  "companionAttack": {
+    "wolf": "Bite 1d6",
+    "dog": "Bite 1d6",
+    "cat": "Bite 1d2, 2 claws 1d2",
+    "eagle": "2 talons 1d4",
+    "horse": "2 hooves 1d4",
+    "catFamiliar": "Bite 1d3",
+    "raven": "Bite 1d3",
+    "owl": "2 talons 1d4",
+    "toad": "Bite 1",
+    "rat": "Bite 1",
+    "bat": "Bite 1d3"
+  },
+  "companionQuality": {
+    "wolfTrip": "Trip: a bite that hits can attempt to trip the target",
+    "flyGood": "Fly speed with good maneuverability",
+    "grantsStealth": "Master gains +3 Stealth",
+    "grantsAppraise": "Master gains +3 Appraise",
+    "grantsPerceptionDark": "Master gains +3 Perception in shadows or darkness",
+    "grantsMaxHp": "Master gains +1 hp per master level",
+    "grantsFortitude": "Master gains +3 Fortitude saves",
+    "grantsBlindsense": "Master gains Blindsense 10 ft."
+  }
+}
