@@ -19,6 +19,7 @@
 }
 
 :root {
+  color-scheme: light;
   --background: #f8fafc;
   --foreground: #0f172a;
   --card: #ffffff;
@@ -37,6 +38,7 @@
 
 :root[data-theme="dark"],
 .dark {
+  color-scheme: dark;
   --background: #0f172a;
   --foreground: #e2e8f0;
   --card: #1e293b;
