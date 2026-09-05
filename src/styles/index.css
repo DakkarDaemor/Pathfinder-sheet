@@ -65,3 +65,16 @@ body {
   background-color: var(--background);
   color: var(--foreground);
 }
+
+/*
+ * Some browsers (notably Firefox) render a closed <select>'s displayed value using the
+ * selected <option>'s own color/background rather than the <select>'s, and fall back to
+ * system colors for any <option> left unstyled — even once color-scheme is set correctly
+ * above. Style option explicitly so the closed value always matches the app's theme.
+ */
+select,
+option {
+  color-scheme: inherit;
+  color: var(--card-foreground);
+  background-color: var(--card);
+}
