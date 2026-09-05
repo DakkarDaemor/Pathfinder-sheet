@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ABILITY_NAMES } from "@/domain/shared/abilities";
 import { SIZE_CATEGORIES } from "@/domain/shared/size";
+import { FEAT_TYPES } from "@/content/types";
 
 const abilityScoresSchema = z.object(
   Object.fromEntries(ABILITY_NAMES.map((name) => [name, z.number()])) as Record<
@@ -29,6 +30,8 @@ const defenseLoadoutSchema = z.object({
 });
 
 const companionKindSchema = z.enum(["animal-companion", "familiar", "mount"]);
+
+const featTypeSchema = z.enum(FEAT_TYPES);
 
 const companionCustomBaseSchema = z.object({
   name: z.string(),
@@ -66,6 +69,7 @@ const characterSchema = z.object({
       featId: z.string().nullable(),
       customName: z.string(),
       customDescription: z.string(),
+      customType: featTypeSchema,
       notes: z.string(),
     }),
   ),
@@ -87,6 +91,8 @@ const characterSchema = z.object({
       spellId: z.string().nullable(),
       customName: z.string(),
       customDescription: z.string(),
+      customSchool: z.string(),
+      customLevel: z.number(),
       prepared: z.boolean(),
     }),
   ),

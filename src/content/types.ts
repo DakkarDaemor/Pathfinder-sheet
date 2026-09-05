@@ -44,7 +44,8 @@ export interface SkillDefinition {
   armorCheckPenalty: boolean;
 }
 
-export type FeatType = "combat" | "general" | "item-creation" | "metamagic" | "other";
+export const FEAT_TYPES = ["combat", "general", "item-creation", "metamagic", "other"] as const;
+export type FeatType = (typeof FEAT_TYPES)[number];
 
 export interface FeatDefinition {
   id: string;

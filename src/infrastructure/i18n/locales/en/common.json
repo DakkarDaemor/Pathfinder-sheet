@@ -134,6 +134,14 @@
       "addCustom": "Add custom feat",
       "customName": "Feat name",
       "customDescription": "Description",
+      "customType": "Feat type",
+      "types": {
+        "combat": "Combat",
+        "general": "General",
+        "item-creation": "Item Creation",
+        "metamagic": "Metamagic",
+        "other": "Other"
+      },
       "notes": "Notes",
       "empty": "No feats added yet."
     },
@@ -152,6 +160,8 @@
       "addCustom": "Add custom spell",
       "customName": "Spell name",
       "customDescription": "Description",
+      "customSchool": "School",
+      "customLevel": "Level",
       "prepared": "Prepared",
       "empty": "No spells known yet."
     },

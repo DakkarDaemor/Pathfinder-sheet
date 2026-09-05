@@ -87,7 +87,7 @@ function CompanionCard({
           className="flex-1"
           placeholder={t("characterSheet.profile.name")}
         />
-        <Select value={companion.baseId ?? CUSTOM_BASE_OPTION} onChange={(e) => switchBase(e.target.value)} className="w-auto">
+        <Select value={companion.baseId ?? CUSTOM_BASE_OPTION} onChange={(e) => switchBase(e.target.value)} className="!w-auto">
           {bases.map((b) => (
             <option key={b.id} value={b.id}>
               {t(b.nameKey)}
@@ -246,7 +246,7 @@ export function CompanionsTab({ character, onChange }: CompanionsTabProps) {
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold">{t("characterSheet.companions.heading")}</h3>
         <Field label={t("characterSheet.companions.masterLevel")}>
-          <NumberInput value={masterLevel} readOnly className="w-20" />
+          <NumberInput value={masterLevel} readOnly className="!w-20" />
         </Field>
       </div>
 

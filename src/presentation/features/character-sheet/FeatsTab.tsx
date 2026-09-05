@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { FEATS, FEATS_BY_ID } from "@/content/feats";
+import { FEAT_TYPES, type FeatType } from "@/content/types";
 import type { FeatSlot, PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
 import { Select, TextArea, TextInput } from "@/presentation/components/fields";
@@ -18,14 +19,20 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
     if (!firstFeat) return;
     onChange((c) => ({
       ...c,
-      feats: [...c.feats, { id: generateId(), featId: firstFeat.id, customName: "", customDescription: "", notes: "" }],
+      feats: [
+        ...c.feats,
+        { id: generateId(), featId: firstFeat.id, customName: "", customDescription: "", customType: "general", notes: "" },
+      ],
     }));
   }
 
   function addCustomFeat() {
     onChange((c) => ({
       ...c,
-      feats: [...c.feats, { id: generateId(), featId: null, customName: "", customDescription: "", notes: "" }],
+      feats: [
+        ...c.feats,
+        { id: generateId(), featId: null, customName: "", customDescription: "", customType: "general", notes: "" },
+      ],
     }));
   }
 
@@ -82,14 +89,28 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                   </p>
                 ) : null}
                 {!featSlot.featId ? (
-                  <TextArea
-                    aria-label={t("characterSheet.feats.customDescription")}
-                    placeholder={t("characterSheet.feats.customDescription")}
-                    rows={2}
-                    className="mb-2"
-                    value={featSlot.customDescription}
-                    onChange={(e) => updateFeat(featSlot.id, { customDescription: e.target.value })}
-                  />
+                  <>
+                    <Select
+                      aria-label={t("characterSheet.feats.customType")}
+                      value={featSlot.customType}
+                      onChange={(e) => updateFeat(featSlot.id, { customType: e.target.value as FeatType })}
+                      className="mb-2 !w-auto"
+                    >
+                      {FEAT_TYPES.map((type) => (
+                        <option key={type} value={type}>
+                          {t(`characterSheet.feats.types.${type}`)}
+                        </option>
+                      ))}
+                    </Select>
+                    <TextArea
+                      aria-label={t("characterSheet.feats.customDescription")}
+                      placeholder={t("characterSheet.feats.customDescription")}
+                      rows={2}
+                      className="mb-2"
+                      value={featSlot.customDescription}
+                      onChange={(e) => updateFeat(featSlot.id, { customDescription: e.target.value })}
+                    />
+                  </>
                 ) : null}
                 <TextInput
                   aria-label={t("characterSheet.feats.notes")}

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { SPELLS, SPELLS_BY_ID } from "@/content/spells";
 import type { KnownSpell, PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
-import { Checkbox, Select, TextInput } from "@/presentation/components/fields";
+import { Checkbox, NumberInput, Select, TextInput } from "@/presentation/components/fields";
 import { generateId } from "@/shared/id";
 
 interface SpellsTabProps {
@@ -20,14 +20,20 @@ export function SpellsTab({ character, onChange }: SpellsTabProps) {
     if (!firstSpell) return;
     onChange((c) => ({
       ...c,
-      spells: [...c.spells, { id: generateId(), spellId: firstSpell.id, customName: "", customDescription: "", prepared: false }],
+      spells: [
+        ...c.spells,
+        { id: generateId(), spellId: firstSpell.id, customName: "", customDescription: "", customSchool: "", customLevel: 0, prepared: false },
+      ],
     }));
   }
 
   function addCustomSpell() {
     onChange((c) => ({
       ...c,
-      spells: [...c.spells, { id: generateId(), spellId: null, customName: "", customDescription: "", prepared: false }],
+      spells: [
+        ...c.spells,
+        { id: generateId(), spellId: null, customName: "", customDescription: "", customSchool: "", customLevel: 0, prepared: false },
+      ],
     }));
   }
 
@@ -49,29 +55,60 @@ export function SpellsTab({ character, onChange }: SpellsTabProps) {
           {character.spells.map((known) => {
             const def = known.spellId ? SPELLS_BY_ID[known.spellId] : undefined;
             return (
-              <li key={known.id} className="flex items-center gap-2 rounded-lg border border-border bg-card p-2">
-                {known.spellId ? (
-                  <Select
-                    aria-label={t("characterSheet.spells.selectSpell")}
-                    value={known.spellId}
-                    onChange={(e) => updateSpell(known.id, { spellId: e.target.value })}
-                    className="flex-1"
-                  >
-                    {SPELLS.map((spell) => (
-                      <option key={spell.id} value={spell.id}>
-                        {t(spell.nameKey)}
-                      </option>
-                    ))}
-                  </Select>
-                ) : (
-                  <TextInput
-                    aria-label={t("characterSheet.spells.customName")}
-                    placeholder={t("characterSheet.spells.customName")}
-                    value={known.customName}
-                    onChange={(e) => updateSpell(known.id, { customName: e.target.value })}
-                    className="flex-1"
-                  />
-                )}
+              <li key={known.id} className="flex flex-col gap-2 rounded-lg border border-border bg-card p-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {known.spellId ? (
+                    <Select
+                      aria-label={t("characterSheet.spells.selectSpell")}
+                      value={known.spellId}
+                      onChange={(e) => updateSpell(known.id, { spellId: e.target.value })}
+                      className="flex-1"
+                    >
+                      {SPELLS.map((spell) => (
+                        <option key={spell.id} value={spell.id}>
+                          {t(spell.nameKey)}
+                        </option>
+                      ))}
+                    </Select>
+                  ) : (
+                    <TextInput
+                      aria-label={t("characterSheet.spells.customName")}
+                      placeholder={t("characterSheet.spells.customName")}
+                      value={known.customName}
+                      onChange={(e) => updateSpell(known.id, { customName: e.target.value })}
+                      className="flex-1"
+                    />
+                  )}
+                  {!known.spellId ? (
+                    <>
+                      <TextInput
+                        aria-label={t("characterSheet.spells.customSchool")}
+                        placeholder={t("characterSheet.spells.customSchool")}
+                        value={known.customSchool}
+                        onChange={(e) => updateSpell(known.id, { customSchool: e.target.value })}
+                        className="!w-28"
+                      />
+                      <NumberInput
+                        aria-label={t("characterSheet.spells.customLevel")}
+                        min={0}
+                        max={9}
+                        value={known.customLevel}
+                        onChange={(e) => updateSpell(known.id, { customLevel: Number(e.target.value) })}
+                        className="!w-16 text-center"
+                      />
+                    </>
+                  ) : null}
+                  <label className="flex items-center gap-1 text-xs">
+                    <Checkbox
+                      checked={known.prepared}
+                      onChange={(e) => updateSpell(known.id, { prepared: e.target.checked })}
+                    />
+                    {t("characterSheet.spells.prepared")}
+                  </label>
+                  <Button variant="ghost" onClick={() => removeSpell(known.id)}>
+                    {t("actions.remove")}
+                  </Button>
+                </div>
                 {def ? <span className="text-xs text-muted-foreground">{t(def.descriptionKey)}</span> : null}
                 {!known.spellId ? (
                   <TextInput
@@ -79,19 +116,8 @@ export function SpellsTab({ character, onChange }: SpellsTabProps) {
                     placeholder={t("characterSheet.spells.customDescription")}
                     value={known.customDescription}
                     onChange={(e) => updateSpell(known.id, { customDescription: e.target.value })}
-                    className="flex-1"
                   />
                 ) : null}
-                <label className="flex items-center gap-1 text-xs">
-                  <Checkbox
-                    checked={known.prepared}
-                    onChange={(e) => updateSpell(known.id, { prepared: e.target.checked })}
-                  />
-                  {t("characterSheet.spells.prepared")}
-                </label>
-                <Button variant="ghost" onClick={() => removeSpell(known.id)}>
-                  {t("actions.remove")}
-                </Button>
               </li>
             );
           })}

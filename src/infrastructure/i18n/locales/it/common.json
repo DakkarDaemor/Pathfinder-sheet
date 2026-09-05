@@ -134,6 +134,14 @@
       "addCustom": "Aggiungi talento personalizzato",
       "customName": "Nome del talento",
       "customDescription": "Descrizione",
+      "customType": "Tipo di talento",
+      "types": {
+        "combat": "Combattimento",
+        "general": "Generale",
+        "item-creation": "Creazione di Oggetti",
+        "metamagic": "Metamagico",
+        "other": "Altro"
+      },
       "notes": "Note",
       "empty": "Nessun talento aggiunto."
     },
@@ -152,6 +160,8 @@
       "addCustom": "Aggiungi incantesimo personalizzato",
       "customName": "Nome dell'incantesimo",
       "customDescription": "Descrizione",
+      "customSchool": "Scuola",
+      "customLevel": "Livello",
       "prepared": "Preparato",
       "empty": "Nessun incantesimo conosciuto."
     },

@@ -1,6 +1,7 @@
 import type { AbilityScores } from "@/domain/shared/abilities";
 import type { DefenseLoadout } from "@/domain/shared/creature";
 import type { SizeCategory } from "@/domain/shared/size";
+import type { FeatType } from "@/content/types";
 
 export interface CharacterClassLevel {
   classId: string;
@@ -19,6 +20,7 @@ export interface FeatSlot {
   featId: string | null; // reference into content/feats.ts; null for a fully custom feat
   customName: string;
   customDescription: string;
+  customType: FeatType; // only meaningful when featId is null; lets custom feats count toward type-gated bonus feats
   notes: string;
 }
 
@@ -37,6 +39,8 @@ export interface KnownSpell {
   spellId: string | null; // reference into content/spells.ts; null for a fully custom spell
   customName: string;
   customDescription: string;
+  customSchool: string; // only meaningful when spellId is null
+  customLevel: number; // only meaningful when spellId is null; enables future spell-slot tracking
   prepared: boolean;
 }
 
