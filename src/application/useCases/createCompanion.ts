@@ -15,6 +15,7 @@ export function createNewCompanion(
     schemaVersion: 1,
     kind,
     baseId,
+    customBase: null,
     name,
     masterCharacterId,
     abilityScoreOverrides: {},

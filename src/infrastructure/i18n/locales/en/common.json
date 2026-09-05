@@ -131,6 +131,9 @@
     "feats": {
       "heading": "Feats",
       "selectFeat": "Select a feat",
+      "addCustom": "Add custom feat",
+      "customName": "Feat name",
+      "customDescription": "Description",
       "notes": "Notes",
       "empty": "No feats added yet."
     },
@@ -146,6 +149,9 @@
     "spells": {
       "heading": "Spells",
       "selectSpell": "Select a spell",
+      "addCustom": "Add custom spell",
+      "customName": "Spell name",
+      "customDescription": "Description",
       "prepared": "Prepared",
       "empty": "No spells known yet."
     },
@@ -157,6 +163,11 @@
       "kindFamiliar": "Familiar",
       "kindMount": "Mount",
       "baseCreature": "Base creature",
+      "customBase": "Custom species...",
+      "customName": "Species name",
+      "naturalAttacks": "Natural attacks",
+      "specialQualities": "Special qualities",
+      "speed": "Speed",
       "masterLevel": "Master level",
       "tricksOrTraits": "Tricks / Traits",
       "empty": "No companion linked to this character yet."

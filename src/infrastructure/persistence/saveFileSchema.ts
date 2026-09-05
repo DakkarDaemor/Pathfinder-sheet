@@ -30,6 +30,15 @@ const defenseLoadoutSchema = z.object({
 
 const companionKindSchema = z.enum(["animal-companion", "familiar", "mount"]);
 
+const companionCustomBaseSchema = z.object({
+  name: z.string(),
+  size: sizeCategorySchema,
+  baseAbilityScores: abilityScoresSchema,
+  naturalAttacks: z.string(),
+  speed: z.number(),
+  specialQualities: z.string(),
+});
+
 const characterSchema = z.object({
   id: z.string(),
   schemaVersion: z.literal(1),
@@ -51,7 +60,15 @@ const characterSchema = z.object({
       miscModifier: z.number(),
     }),
   ),
-  feats: z.array(z.object({ id: z.string(), featId: z.string(), notes: z.string() })),
+  feats: z.array(
+    z.object({
+      id: z.string(),
+      featId: z.string().nullable(),
+      customName: z.string(),
+      customDescription: z.string(),
+      notes: z.string(),
+    }),
+  ),
   traits: z.array(z.string()),
   inventory: z.array(
     z.object({
@@ -64,7 +81,15 @@ const characterSchema = z.object({
       notes: z.string(),
     }),
   ),
-  spells: z.array(z.object({ id: z.string(), spellId: z.string(), prepared: z.boolean() })),
+  spells: z.array(
+    z.object({
+      id: z.string(),
+      spellId: z.string().nullable(),
+      customName: z.string(),
+      customDescription: z.string(),
+      prepared: z.boolean(),
+    }),
+  ),
   companions: z.array(z.object({ companionId: z.string(), kind: companionKindSchema })),
   notes: z.string(),
   createdAt: z.string(),
@@ -75,7 +100,8 @@ const companionSchema = z.object({
   id: z.string(),
   schemaVersion: z.literal(1),
   kind: companionKindSchema,
-  baseId: z.string(),
+  baseId: z.string().nullable(),
+  customBase: companionCustomBaseSchema.nullable(),
   name: z.string(),
   masterCharacterId: z.string(),
   abilityScoreOverrides: abilityScoresSchema.partial(),

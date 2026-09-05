@@ -16,7 +16,9 @@ export interface SkillRank {
 
 export interface FeatSlot {
   id: string;
-  featId: string;
+  featId: string | null; // reference into content/feats.ts; null for a fully custom feat
+  customName: string;
+  customDescription: string;
   notes: string;
 }
 
@@ -32,7 +34,9 @@ export interface InventoryItem {
 
 export interface KnownSpell {
   id: string;
-  spellId: string;
+  spellId: string | null; // reference into content/spells.ts; null for a fully custom spell
+  customName: string;
+  customDescription: string;
   prepared: boolean;
 }
 

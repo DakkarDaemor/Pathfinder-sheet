@@ -10,12 +10,30 @@ import {
 } from "@/domain/shared/creature";
 import { calculateCarryingCapacity, type CarryingCapacity } from "@/domain/shared/encumbrance";
 import type { AbilityScores } from "@/domain/shared/abilities";
-import type { CompanionBaseDefinition } from "@/content/types";
+import type { SizeCategory } from "@/domain/shared/size";
+import { COMPANION_BASES_BY_ID } from "@/content/companions";
 import { COMPANION_REGISTRY, type CompanionProgression, type MasterCombatSummary } from "./registry";
 import type { Companion } from "./types";
 
+export interface CompanionBaseStats {
+  size: SizeCategory;
+  baseAbilityScores: AbilityScores;
+}
+
+/** Resolves species stats from the built-in catalog (baseId) or the companion's own custom base. */
+export function resolveCompanionBaseStats(companion: Companion): CompanionBaseStats | null {
+  if (companion.baseId) {
+    const base = COMPANION_BASES_BY_ID[companion.baseId];
+    return base ? { size: base.size, baseAbilityScores: base.baseAbilityScores } : null;
+  }
+  if (companion.customBase) {
+    return { size: companion.customBase.size, baseAbilityScores: companion.customBase.baseAbilityScores };
+  }
+  return null;
+}
+
 export function resolveCompanionAbilityScores(
-  base: CompanionBaseDefinition,
+  base: CompanionBaseStats,
   companion: Companion,
   progression: CompanionProgression,
 ): AbilityScores {
@@ -39,10 +57,12 @@ export interface CompanionCombatSheet {
 
 export function deriveCompanionCombatSheet(
   companion: Companion,
-  base: CompanionBaseDefinition,
   masterLevel: number,
   master?: MasterCombatSummary,
-): CompanionCombatSheet {
+): CompanionCombatSheet | null {
+  const base = resolveCompanionBaseStats(companion);
+  if (!base) return null;
+
   const progression = COMPANION_REGISTRY[companion.kind].computeProgression(masterLevel, master);
   const abilityScores = resolveCompanionAbilityScores(base, companion, progression);
 

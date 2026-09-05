@@ -131,6 +131,9 @@
     "feats": {
       "heading": "Talenti",
       "selectFeat": "Seleziona un talento",
+      "addCustom": "Aggiungi talento personalizzato",
+      "customName": "Nome del talento",
+      "customDescription": "Descrizione",
       "notes": "Note",
       "empty": "Nessun talento aggiunto."
     },
@@ -146,6 +149,9 @@
     "spells": {
       "heading": "Incantesimi",
       "selectSpell": "Seleziona un incantesimo",
+      "addCustom": "Aggiungi incantesimo personalizzato",
+      "customName": "Nome dell'incantesimo",
+      "customDescription": "Descrizione",
       "prepared": "Preparato",
       "empty": "Nessun incantesimo conosciuto."
     },
@@ -157,6 +163,11 @@
       "kindFamiliar": "Famiglio",
       "kindMount": "Cavalcatura",
       "baseCreature": "Creatura base",
+      "customBase": "Specie personalizzata...",
+      "customName": "Nome della specie",
+      "naturalAttacks": "Attacchi naturali",
+      "specialQualities": "Qualità speciali",
+      "speed": "Velocità",
       "masterLevel": "Livello del padrone",
       "tricksOrTraits": "Trucchi / Tratti",
       "empty": "Nessun companion collegato a questo personaggio."
