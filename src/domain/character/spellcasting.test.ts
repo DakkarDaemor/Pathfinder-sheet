@@ -40,7 +40,7 @@ const human: RaceDefinition = {
   speed: 30,
   abilityAdjustments: {},
   floatingAbilityBonus: 2,
-  traitKeys: [],
+  traits: [],
 };
 
 const racesById: RaceLookup = { human };
@@ -58,6 +58,7 @@ function baseCharacter(overrides: Partial<PlayerCharacter> = {}): PlayerCharacte
     classLevels: [],
     abilityScores: createDefaultAbilityScores(10),
     floatingAbilityChoice: null,
+    floatingSkillChoice: null,
     hitPoints: { max: 1, current: 1, nonLethal: 0, autoMax: false },
     defense: createDefaultDefenseLoadout(),
     skills: [],
@@ -86,7 +87,18 @@ describe("applyBonusSpells", () => {
 
   it("does not grant a bonus at a level the class hasn't unlocked yet, even with a very high modifier", () => {
     const base = [null, 0, null, null, null, null, null, null, null, null] as const; // paladin-shaped: level 1 not yet accessible
-    expect(applyBonusSpells(base, 9)).toEqual([null, 1, null, null, null, null, null, null, null, null]);
+    expect(applyBonusSpells(base, 9)).toEqual([
+      null,
+      1,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ]);
   });
 });
 

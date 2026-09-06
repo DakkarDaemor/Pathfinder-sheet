@@ -21,20 +21,40 @@ import {
 import { baseAttackBonus, baseSaveBonus } from "@/domain/shared/progressions";
 import { sizeModifierAC } from "@/domain/shared/size";
 import { ARMORS_BY_ID, WEAPONS_BY_ID } from "@/content/equipment";
-import type { ArmorDefinition, ClassDefinition, RaceDefinition, SkillDefinition, WeaponDefinition } from "@/content/types";
+import type {
+  ArmorDefinition,
+  ClassDefinition,
+  RaceDefinition,
+  SkillDefinition,
+  WeaponDefinition,
+} from "@/content/types";
 import { resolveFeatBonuses, type FeatBonuses, type FeatLookup } from "./featEffects";
+import { resolveRaceBonuses } from "./raceEffects";
+import { totalCharacterLevel } from "./types";
 import type { CustomArmorStats, CustomWeaponStats, PlayerCharacter } from "./types";
 
 export type ClassLookup = Record<string, ClassDefinition | undefined>;
 export type SkillLookup = Record<string, SkillDefinition | undefined>;
 export type RaceLookup = Record<string, RaceDefinition | undefined>;
 
+/** Adds two partial saving-throw bonus sets together (e.g. a feat's + a racial trait's). */
+function mergeSaveBonuses(a: Partial<BaseSaves>, b: Partial<BaseSaves>): Partial<BaseSaves> {
+  return {
+    fort: (a.fort ?? 0) + (b.fort ?? 0),
+    ref: (a.ref ?? 0) + (b.ref ?? 0),
+    will: (a.will ?? 0) + (b.will ?? 0),
+  };
+}
+
 /**
  * Base ability scores plus racial adjustments (`RaceDefinition.abilityAdjustments`) and the
  * player's chosen ability for a floating racial bonus (e.g. Human +2), if any. All combat/skill
  * calculations below use these effective scores rather than the character's raw base scores.
  */
-export function deriveEffectiveAbilityScores(character: PlayerCharacter, racesById: RaceLookup): AbilityScores {
+export function deriveEffectiveAbilityScores(
+  character: PlayerCharacter,
+  racesById: RaceLookup,
+): AbilityScores {
   const race = racesById[character.raceId];
   const scores = { ...character.abilityScores };
   if (!race) return scores;
@@ -49,7 +69,10 @@ export function deriveEffectiveAbilityScores(character: PlayerCharacter, racesBy
 }
 
 /** Multiclass rule: BAB is each class's own progression, summed together. */
-export function resolveBaseAttackBonus(character: PlayerCharacter, classesById: ClassLookup): number {
+export function resolveBaseAttackBonus(
+  character: PlayerCharacter,
+  classesById: ClassLookup,
+): number {
   return character.classLevels.reduce((sum, cl) => {
     const def = classesById[cl.classId];
     return def ? sum + baseAttackBonus(def.babProgression, cl.level) : sum;
@@ -79,7 +102,9 @@ export interface EquipmentDefenseBonuses {
   armorMaxDexBonus: number | null;
 }
 
-function customArmorAsDefinition(custom: CustomArmorStats): Pick<ArmorDefinition, "category" | "acBonus" | "maxDexBonus" | "checkPenalty"> {
+function customArmorAsDefinition(
+  custom: CustomArmorStats,
+): Pick<ArmorDefinition, "category" | "acBonus" | "maxDexBonus" | "checkPenalty"> {
   return custom;
 }
 
@@ -93,7 +118,9 @@ function customArmorAsDefinition(custom: CustomArmorStats): Pick<ArmorDefinition
  * number (e.g. -1), while `DefenseLoadout.armorCheckPenalty` is a positive magnitude that callers
  * (see `deriveSkillTotals` below) subtract from totals — the sign is flipped here to match.
  */
-export function resolveEquipmentDefenseBonuses(inventory: PlayerCharacter["inventory"]): EquipmentDefenseBonuses {
+export function resolveEquipmentDefenseBonuses(
+  inventory: PlayerCharacter["inventory"],
+): EquipmentDefenseBonuses {
   let armorBonus = 0;
   let shieldBonus = 0;
   let armorCheckPenalty = 0;
@@ -101,7 +128,11 @@ export function resolveEquipmentDefenseBonuses(inventory: PlayerCharacter["inven
 
   for (const item of inventory) {
     if (!item.equipped) continue;
-    const armorDef = item.equipmentId ? ARMORS_BY_ID[item.equipmentId] : item.customArmor ? customArmorAsDefinition(item.customArmor) : undefined;
+    const armorDef = item.equipmentId
+      ? ARMORS_BY_ID[item.equipmentId]
+      : item.customArmor
+        ? customArmorAsDefinition(item.customArmor)
+        : undefined;
     if (!armorDef) continue;
 
     armorCheckPenalty += -armorDef.checkPenalty;
@@ -139,7 +170,11 @@ export interface EncumbranceInfo {
  * medium/heavy armor (Core Rulebook carrying capacity rules), and reduces speed the same way.
  * This combines with — rather than replaces — any penalty from actually worn armor.
  */
-function resolveEncumbrance(character: PlayerCharacter, effectiveStr: number, race: RaceDefinition | undefined): EncumbranceInfo {
+function resolveEncumbrance(
+  character: PlayerCharacter,
+  effectiveStr: number,
+  race: RaceDefinition | undefined,
+): EncumbranceInfo {
   const totalWeight = totalInventoryWeight(character.inventory);
   const capacity = calculateCarryingCapacity(effectiveStr, character.size);
   const level = resolveEncumbranceLevel(totalWeight, capacity);
@@ -170,7 +205,9 @@ function resolveCombinedDefense(
     armorBonus: character.defense.armorBonus + equipmentDefenseBonuses.armorBonus,
     shieldBonus: character.defense.shieldBonus + equipmentDefenseBonuses.shieldBonus,
     armorCheckPenalty:
-      character.defense.armorCheckPenalty + equipmentDefenseBonuses.armorCheckPenalty + -encumbrancePenalty.checkPenalty,
+      character.defense.armorCheckPenalty +
+      equipmentDefenseBonuses.armorCheckPenalty +
+      -encumbrancePenalty.checkPenalty,
     armorMaxDexBonus: combineMaxDex(
       combineMaxDex(character.defense.armorMaxDexBonus, equipmentDefenseBonuses.armorMaxDexBonus),
       encumbrancePenalty.maxDexBonus,
@@ -186,28 +223,74 @@ function averageHitDie(hitDie: number): number {
   return Math.ceil((hitDie + 1) / 2);
 }
 
+export interface HitPointLevelRow {
+  classIndex: number; // index into character.classLevels
+  levelIndexInClass: number; // 0-based index within that class entry's hpRolls array
+  classId: string;
+  isFirstOverall: boolean; // true only for the character's very first level ever
+  defaultRoll: number; // hitDie if isFirstOverall, averageHitDie(hitDie) otherwise
+  override: number | null; // from cl.hpRolls?.[levelIndexInClass] ?? null
+  rollUsed: number; // override ?? defaultRoll
+  conMod: number;
+  total: number; // rollUsed + conMod
+}
+
 /**
- * v1 simplification: only the character's very first class level rolls/takes the *maximum*
- * hit die; every other level (further levels in that class, or the first level of any class
- * added later for a multiclass character) takes the average. This matches RAW for single-classed
- * characters; for multiclass characters RAW only grants max HD on true character level 1, which
- * this approximates by treating `classLevels[0]` as that first class.
+ * One row per level the character has taken, in the same order `deriveHitPointsMax` used to
+ * sum internally — centralized here so both the total and the per-level breakdown UI
+ * (Combat tab) share a single source of truth for "which level is the very first" and what its
+ * default hit-die value is. v1 simplification: only the character's very first class level
+ * defaults to the *maximum* hit die; every other level (further levels in that class, or the
+ * first level of any class added later for a multiclass character) defaults to the average
+ * (Core Rulebook "take average" rule) — `hpRolls` lets the player override any single level's
+ * default with their own roll. This matches RAW for single-classed characters; for multiclass
+ * characters RAW only grants max HD on true character level 1, which this approximates by
+ * treating `classLevels[0]` as that first class.
  */
-export function deriveHitPointsMax(character: PlayerCharacter, classesById: ClassLookup, effectiveAbilityScores: AbilityScores): number {
+export function deriveHitPointBreakdown(
+  character: PlayerCharacter,
+  classesById: ClassLookup,
+  effectiveAbilityScores: AbilityScores,
+): HitPointLevelRow[] {
   const conMod = abilityModifier(effectiveAbilityScores.con);
-  let total = 0;
+  const rows: HitPointLevelRow[] = [];
   let isFirstLevelOverall = true;
 
-  for (const cl of character.classLevels) {
+  character.classLevels.forEach((cl, classIndex) => {
     const def = classesById[cl.classId];
-    if (!def) continue;
+    if (!def) return;
     for (let i = 0; i < cl.level; i++) {
-      total += isFirstLevelOverall ? def.hitDie : averageHitDie(def.hitDie);
+      const isFirstOverall = isFirstLevelOverall;
       isFirstLevelOverall = false;
-      total += conMod;
+      const defaultRoll = isFirstOverall ? def.hitDie : averageHitDie(def.hitDie);
+      const override = cl.hpRolls?.[i] ?? null;
+      const rollUsed = override ?? defaultRoll;
+      rows.push({
+        classIndex,
+        levelIndexInClass: i,
+        classId: cl.classId,
+        isFirstOverall,
+        defaultRoll,
+        override,
+        rollUsed,
+        conMod,
+        total: rollUsed + conMod,
+      });
     }
-  }
-  return total;
+  });
+
+  return rows;
+}
+
+export function deriveHitPointsMax(
+  character: PlayerCharacter,
+  classesById: ClassLookup,
+  effectiveAbilityScores: AbilityScores,
+): number {
+  return deriveHitPointBreakdown(character, classesById, effectiveAbilityScores).reduce(
+    (sum, row) => sum + row.total,
+    0,
+  );
 }
 
 export interface CharacterCombatSheet {
@@ -231,16 +314,22 @@ export function deriveCombatSheet(
 ): CharacterCombatSheet {
   const effectiveAbilityScores = deriveEffectiveAbilityScores(character, racesById);
   const featBonuses = resolveFeatBonuses(character, featsById);
+  const raceBonuses = resolveRaceBonuses(character, racesById);
   const bab = resolveBaseAttackBonus(character, classesById);
   const baseSaves = resolveBaseSaves(character, classesById);
-  const { defense, equipmentDefenseBonuses, encumbrance } = resolveCombinedDefense(character, effectiveAbilityScores, racesById, featBonuses);
+  const { defense, equipmentDefenseBonuses, encumbrance } = resolveCombinedDefense(
+    character,
+    effectiveAbilityScores,
+    racesById,
+    featBonuses,
+  );
   const profile: CreatureCombatProfile = {
     size: character.size,
     abilityScores: effectiveAbilityScores,
     baseAttackBonus: bab,
     baseSaves,
     defense,
-    miscSaveBonuses: featBonuses.savingThrows,
+    miscSaveBonuses: mergeSaveBonuses(featBonuses.savingThrows, raceBonuses.savingThrows),
     miscInitiative: featBonuses.initiative,
   };
 
@@ -253,7 +342,8 @@ export function deriveCombatSheet(
     carryingCapacity: encumbrance.capacity,
     equipmentDefenseBonuses,
     encumbrance,
-    hitPointsMax: deriveHitPointsMax(character, classesById, effectiveAbilityScores) + featBonuses.hitPoints,
+    hitPointsMax:
+      deriveHitPointsMax(character, classesById, effectiveAbilityScores) + featBonuses.hitPoints,
     effectiveAbilityScores,
   };
 }
@@ -270,7 +360,9 @@ export interface DerivedAttack {
   customDamageTypes: boolean; // true when damageTypes are free text (custom weapon), not i18n keys
 }
 
-function customWeaponAsDefinition(custom: CustomWeaponStats): Pick<WeaponDefinition, "damage" | "critRange" | "critMultiplier" | "damageTypes"> {
+function customWeaponAsDefinition(
+  custom: CustomWeaponStats,
+): Pick<WeaponDefinition, "damage" | "critRange" | "critMultiplier" | "damageTypes"> {
   return {
     damage: custom.damage,
     critRange: custom.critRange,
@@ -289,7 +381,12 @@ function customWeaponAsDefinition(custom: CustomWeaponStats): Pick<WeaponDefinit
  * rules — use the character's misc modifiers for those cases. A feat like Weapon Focus is picked
  * against a catalog weapon id, so its bonus only applies to catalog weapons, not custom ones.
  */
-export function deriveAttacks(character: PlayerCharacter, classesById: ClassLookup, racesById: RaceLookup, featsById: FeatLookup): DerivedAttack[] {
+export function deriveAttacks(
+  character: PlayerCharacter,
+  classesById: ClassLookup,
+  racesById: RaceLookup,
+  featsById: FeatLookup,
+): DerivedAttack[] {
   const effectiveAbilityScores = deriveEffectiveAbilityScores(character, racesById);
   const featBonuses = resolveFeatBonuses(character, featsById);
   const bab = resolveBaseAttackBonus(character, classesById);
@@ -300,9 +397,15 @@ export function deriveAttacks(character: PlayerCharacter, classesById: ClassLook
   const attacks: DerivedAttack[] = [];
   for (const item of character.inventory) {
     if (!item.equipped) continue;
-    const weaponDef = item.equipmentId ? WEAPONS_BY_ID[item.equipmentId] : item.customWeapon ? customWeaponAsDefinition(item.customWeapon) : undefined;
+    const weaponDef = item.equipmentId
+      ? WEAPONS_BY_ID[item.equipmentId]
+      : item.customWeapon
+        ? customWeaponAsDefinition(item.customWeapon)
+        : undefined;
     if (!weaponDef) continue;
-    const weaponFeatBonus = item.equipmentId ? (featBonuses.weaponAttackBonuses[item.equipmentId] ?? 0) : 0;
+    const weaponFeatBonus = item.equipmentId
+      ? (featBonuses.weaponAttackBonuses[item.equipmentId] ?? 0)
+      : 0;
     attacks.push({
       inventoryItemId: item.id,
       name: item.name,
@@ -325,10 +428,16 @@ export interface SkillTotal {
   isClassSkill: boolean;
 }
 
-function isClassSkillFor(skillId: string, character: PlayerCharacter, classesById: ClassLookup): boolean {
+function isClassSkillFor(
+  skillId: string,
+  character: PlayerCharacter,
+  classesById: ClassLookup,
+): boolean {
   const override = character.skills.find((s) => s.skillId === skillId)?.classSkillOverride;
   if (override !== undefined) return override;
-  return character.classLevels.some((cl) => classesById[cl.classId]?.classSkillIds.includes(skillId) ?? false);
+  return character.classLevels.some(
+    (cl) => classesById[cl.classId]?.classSkillIds.includes(skillId) ?? false,
+  );
 }
 
 export function deriveSkillTotals(
@@ -340,22 +449,35 @@ export function deriveSkillTotals(
 ): SkillTotal[] {
   const effectiveAbilityScores = deriveEffectiveAbilityScores(character, racesById);
   const featBonuses = resolveFeatBonuses(character, featsById);
+  const raceBonuses = resolveRaceBonuses(character, racesById);
   // Reuses the same combined check penalty (manual + equipped armor/shield + encumbrance) that
   // feeds AC, so a skill's penalty always matches what's shown on the Combat tab.
-  const { defense } = resolveCombinedDefense(character, effectiveAbilityScores, racesById, featBonuses);
+  const { defense } = resolveCombinedDefense(
+    character,
+    effectiveAbilityScores,
+    racesById,
+    featBonuses,
+  );
 
   return character.skills.map((rank) => {
     const def = skillsById[rank.skillId];
-    const featBonus = featBonuses.skillBonuses[rank.skillId] ?? 0;
+    const miscBonus =
+      (featBonuses.skillBonuses[rank.skillId] ?? 0) + (raceBonuses.skillBonuses[rank.skillId] ?? 0);
     if (!def) {
-      return { skillId: rank.skillId, ranks: rank.ranks, total: rank.ranks + rank.miscModifier + featBonus, isClassSkill: false };
+      return {
+        skillId: rank.skillId,
+        ranks: rank.ranks,
+        total: rank.ranks + rank.miscModifier + miscBonus,
+        isClassSkill: false,
+      };
     }
 
     const isClassSkill = isClassSkillFor(rank.skillId, character, classesById);
     const abilityMod = abilityModifier(effectiveAbilityScores[def.keyAbility]);
     const classSkillBonus = isClassSkill && rank.ranks > 0 ? 3 : 0;
     const armorCheckPenalty = def.armorCheckPenalty ? defense.armorCheckPenalty : 0;
-    const total = rank.ranks + abilityMod + classSkillBonus + rank.miscModifier + featBonus - armorCheckPenalty;
+    const total =
+      rank.ranks + abilityMod + classSkillBonus + rank.miscModifier + miscBonus - armorCheckPenalty;
 
     return { skillId: rank.skillId, ranks: rank.ranks, total, isClassSkill };
   });
@@ -364,4 +486,45 @@ export function deriveSkillTotals(
 /** Skill points gained per level (before racial modifiers), Core Rulebook rule: min 1/level. */
 export function skillPointsForLevel(classDef: ClassDefinition, intModifier: number): number {
   return Math.max(1, classDef.skillPointsPerLevel + intModifier);
+}
+
+export interface SkillPointBudget {
+  available: number;
+  spent: number;
+}
+
+/**
+ * How many skill points the character should have to spend vs. how many are actually invested
+ * in `character.skills[].ranks` — purely informational (shown in the Skills tab), doesn't
+ * block entry. v1 simplification, consistent with `deriveHitPointsMax`: uses the character's
+ * *current* Intelligence for every level rather than tracking what it was at each level taken.
+ */
+export function deriveSkillPointBudget(
+  character: PlayerCharacter,
+  classesById: ClassLookup,
+  racesById: RaceLookup,
+  effectiveAbilityScores: AbilityScores,
+): SkillPointBudget {
+  const intMod = abilityModifier(effectiveAbilityScores.int);
+  const base = character.classLevels.reduce((sum, cl) => {
+    const def = classesById[cl.classId];
+    return def ? sum + skillPointsForLevel(def, intMod) * cl.level : sum;
+  }, 0);
+  const raceBonus =
+    resolveRaceBonuses(character, racesById).extraSkillPointsPerLevel *
+    totalCharacterLevel(character);
+  const spent = character.skills.reduce((sum, s) => sum + s.ranks, 0);
+  return { available: base + raceBonus, spent };
+}
+
+/**
+ * A reference count of how many feats the character should have by now — one at 1st level and
+ * one every odd level after (Core Rulebook), plus any racial bonus feat slots (e.g. Human).
+ * Deliberately does NOT include class-granted bonus feats (Fighter, Ranger combat styles,
+ * etc. — not modeled in this sheet), so it's a floor/reference, not an exact cap.
+ */
+export function deriveExpectedFeatCount(character: PlayerCharacter, racesById: RaceLookup): number {
+  const level = totalCharacterLevel(character);
+  if (level <= 0) return 0;
+  return Math.ceil(level / 2) + resolveRaceBonuses(character, racesById).bonusFeatSlots;
 }

@@ -19,6 +19,7 @@ export function createNewCharacter(name: string): PlayerCharacter {
     classLevels: [],
     abilityScores: createDefaultAbilityScores(10),
     floatingAbilityChoice: null,
+    floatingSkillChoice: null,
     hitPoints: { max: 0, current: 0, nonLethal: 0, autoMax: true },
     defense: createDefaultDefenseLoadout(),
     skills: SKILLS.map((skill) => ({ skillId: skill.id, ranks: 0, miscModifier: 0 })),

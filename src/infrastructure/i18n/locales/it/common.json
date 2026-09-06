@@ -77,7 +77,8 @@
       "class": "Classe",
       "level": "Livello",
       "totalLevel": "Livello totale",
-      "floatingAbilityChoice": "Bonus razziale libero (+{{bonus}} a...)"
+      "floatingAbilityChoice": "Bonus razziale libero (+{{bonus}} a...)",
+      "floatingSkillChoice": "Abilità scelta per il tratto razziale (es. Ossessivo)"
     },
     "abilities": {
       "score": "Punteggio",
@@ -112,6 +113,12 @@
       "hpCurrent": "PF Attuali",
       "hpNonLethal": "Danno Non Letale",
       "hpManual": "Inserimento manuale",
+      "hpPerLevel": "PF per livello",
+      "hpLevelColumn": "Livello",
+      "hpClassColumn": "Classe",
+      "hpRollColumn": "Dado Vita",
+      "hpTotalColumn": "Totale",
+      "hpRollsHint": "Lascia vuoto per usare la media (il massimo al primo livello); scrivi il tuo tiro se preferisci tirare il dado.",
       "carryingCapacity": "Capacità di Carico",
       "light": "Leggero",
       "medium": "Medio",
@@ -146,10 +153,12 @@
       "classSkill": "Ab. di Classe",
       "misc": "Varie",
       "total": "Totale",
-      "trainedOnly": "Solo Addestrati"
+      "trainedOnly": "Solo Addestrati",
+      "pointsBudget": "Punti abilità: {{spent}} / {{available}} disponibili"
     },
     "feats": {
       "heading": "Talenti",
+      "expectedCount": "Talenti: {{count}} / almeno {{expected}} attesi (esclusi eventuali talenti bonus di classe)",
       "selectFeat": "Seleziona un talento",
       "addCustom": "Aggiungi talento personalizzato",
       "customName": "Nome del talento",

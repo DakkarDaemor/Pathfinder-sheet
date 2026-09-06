@@ -71,9 +71,16 @@ const characterSchema = z.object({
   alignment: z.string(),
   deity: z.string(),
   size: sizeCategorySchema,
-  classLevels: z.array(z.object({ classId: z.string(), level: z.number() })),
+  classLevels: z.array(
+    z.object({
+      classId: z.string(),
+      level: z.number(),
+      hpRolls: z.array(z.number().nullable()).optional(),
+    }),
+  ),
   abilityScores: abilityScoresSchema,
   floatingAbilityChoice: abilityNameSchema.nullable().default(null),
+  floatingSkillChoice: z.string().nullable().default(null),
   hitPoints: hitPointsSchema,
   defense: defenseLoadoutSchema,
   skills: z.array(

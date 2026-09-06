@@ -1,12 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultAbilityScores } from "@/domain/shared/abilities";
 import { createDefaultDefenseLoadout } from "@/domain/shared/creature";
-import type { ClassDefinition, FeatDefinition, RaceDefinition, SkillDefinition } from "@/content/types";
+import type {
+  ClassDefinition,
+  FeatDefinition,
+  RaceDefinition,
+  SkillDefinition,
+} from "@/content/types";
 import type { FeatLookup } from "./featEffects";
 import {
   deriveAttacks,
+  deriveCombatSheet,
   deriveEffectiveAbilityScores,
+  deriveExpectedFeatCount,
+  deriveHitPointBreakdown,
   deriveHitPointsMax,
+  deriveSkillPointBudget,
   deriveSkillTotals,
   resolveBaseAttackBonus,
   resolveBaseSaves,
@@ -53,7 +62,31 @@ const climb: SkillDefinition = {
   armorCheckPenalty: true,
 };
 
-const skillsById: SkillLookup = { climb };
+const perception: SkillDefinition = {
+  id: "perception",
+  nameKey: "srd:skill.perception.name",
+  keyAbility: "wis",
+  trainedOnly: false,
+  armorCheckPenalty: false,
+};
+
+const acrobatics: SkillDefinition = {
+  id: "acrobatics",
+  nameKey: "srd:skill.acrobatics.name",
+  keyAbility: "dex",
+  trainedOnly: false,
+  armorCheckPenalty: true,
+};
+
+const craft: SkillDefinition = {
+  id: "craft",
+  nameKey: "srd:skill.craft.name",
+  keyAbility: "int",
+  trainedOnly: false,
+  armorCheckPenalty: false,
+};
+
+const skillsById: SkillLookup = { climb, perception, acrobatics, craft };
 
 const dwarf: RaceDefinition = {
   id: "dwarf",
@@ -61,9 +94,12 @@ const dwarf: RaceDefinition = {
   size: "medium",
   speed: 20,
   abilityAdjustments: { con: 2, wis: 2, cha: -2 },
-  traitKeys: [],
+  traits: [],
 };
 
+// Human's real racial effects (Skilled +1 skill point/level, Bonus Feat) are attached here since
+// this fixture is the default race for baseCharacter() and neither effect touches saves/skill
+// totals, so it's safe to keep as the shared default without perturbing unrelated tests.
 const human: RaceDefinition = {
   id: "human",
   nameKey: "srd:race.human",
@@ -71,10 +107,46 @@ const human: RaceDefinition = {
   speed: 30,
   abilityAdjustments: {},
   floatingAbilityBonus: 2,
-  traitKeys: [],
+  traits: [
+    { nameKey: "srd:raceTrait.bonusFeat", effects: [{ kind: "bonusFeatSlot", count: 1 }] },
+    { nameKey: "srd:raceTrait.skilled", effects: [{ kind: "extraSkillPointPerLevel", bonus: 1 }] },
+  ],
 };
 
-const racesById: RaceLookup = { dwarf, human };
+const halfling: RaceDefinition = {
+  id: "halfling",
+  nameKey: "srd:race.halfling",
+  size: "small",
+  speed: 20,
+  abilityAdjustments: { dex: 2, cha: 2, str: -2 },
+  traits: [
+    { nameKey: "srd:raceTrait.halflingLuck", effects: [{ kind: "savingThrowAll", bonus: 1 }] },
+    {
+      nameKey: "srd:raceTrait.keenSenses",
+      effects: [{ kind: "skillBonus", skillId: "perception", bonus: 2 }],
+    },
+    {
+      nameKey: "srd:raceTrait.sureFooted",
+      effects: [
+        { kind: "skillBonus", skillId: "acrobatics", bonus: 2 },
+        { kind: "skillBonus", skillId: "climb", bonus: 2 },
+      ],
+    },
+  ],
+};
+
+const gnome: RaceDefinition = {
+  id: "gnome",
+  nameKey: "srd:race.gnome",
+  size: "small",
+  speed: 20,
+  abilityAdjustments: { con: 2, cha: 2, str: -2 },
+  traits: [
+    { nameKey: "srd:raceTrait.obsessive", effects: [{ kind: "skillFocusChoice", bonus: 2 }] },
+  ],
+};
+
+const racesById: RaceLookup = { dwarf, human, halfling, gnome };
 
 const skillFocus: FeatDefinition = {
   id: "skillFocus",
@@ -123,6 +195,7 @@ function baseCharacter(overrides: Partial<PlayerCharacter> = {}): PlayerCharacte
     classLevels: [],
     abilityScores: createDefaultAbilityScores(10),
     floatingAbilityChoice: null,
+    floatingSkillChoice: null,
     hitPoints: { max: 1, current: 1, nonLethal: 0, autoMax: false },
     defense: createDefaultDefenseLoadout(),
     skills: [],
@@ -195,6 +268,46 @@ describe("deriveSkillTotals", () => {
     // ranks(2) + strMod(2) + classSkill(3) + skillFocus(3) - armorCheckPenalty(0) = 10
     expect(total?.total).toBe(10);
   });
+
+  it("adds an unconditional racial skill bonus even with zero ranks (Halfling Keen Senses)", () => {
+    const character = baseCharacter({
+      raceId: "halfling",
+      skills: [{ skillId: "perception", ranks: 0, miscModifier: 0 }],
+    });
+
+    const [total] = deriveSkillTotals(character, classesById, skillsById, racesById, {});
+    // wisMod(0) + keenSenses(2) = 2
+    expect(total?.total).toBe(2);
+  });
+
+  it("adds a player-chosen racial skill bonus (Gnome Obsessive) only when a skill is picked", () => {
+    const unpicked = baseCharacter({
+      raceId: "gnome",
+      skills: [{ skillId: "craft", ranks: 0, miscModifier: 0 }],
+    });
+    const [unpickedTotal] = deriveSkillTotals(unpicked, classesById, skillsById, racesById, {});
+    expect(unpickedTotal?.total).toBe(0);
+
+    const picked = baseCharacter({
+      raceId: "gnome",
+      floatingSkillChoice: "craft",
+      skills: [{ skillId: "craft", ranks: 0, miscModifier: 0 }],
+    });
+    const [pickedTotal] = deriveSkillTotals(picked, classesById, skillsById, racesById, {});
+    // intMod(0) + obsessive(2) = 2
+    expect(pickedTotal?.total).toBe(2);
+  });
+});
+
+describe("deriveCombatSheet racial saving throw bonuses", () => {
+  it("adds an unconditional racial saving-throw bonus to all three saves (Halfling Luck)", () => {
+    const character = baseCharacter({ raceId: "halfling" });
+    const sheet = deriveCombatSheet(character, classesById, racesById, {});
+    // effective dex = 10 - 2(str) + 2(dex) ... halfling: str-2, dex+2, cha+2 -> dexMod(12) = 1
+    expect(sheet.savingThrows.fort).toBe(1); // conMod(0) + luck(1)
+    expect(sheet.savingThrows.ref).toBe(2); // dexMod(1) + luck(1)
+    expect(sheet.savingThrows.will).toBe(1); // wisMod(0) + luck(1)
+  });
 });
 
 describe("skillPointsForLevel", () => {
@@ -225,7 +338,10 @@ function inventoryItem(overrides: Partial<InventoryItem>): InventoryItem {
 
 describe("deriveEffectiveAbilityScores", () => {
   it("applies fixed racial adjustments on top of the base score", () => {
-    const character = baseCharacter({ raceId: "dwarf", abilityScores: { ...createDefaultAbilityScores(10), con: 12 } });
+    const character = baseCharacter({
+      raceId: "dwarf",
+      abilityScores: { ...createDefaultAbilityScores(10), con: 12 },
+    });
     const effective = deriveEffectiveAbilityScores(character, racesById);
     expect(effective.con).toBe(14);
     expect(effective.wis).toBe(12);
@@ -267,6 +383,107 @@ describe("deriveHitPointsMax", () => {
     // fighter d10 first level max(10) + wizard d6 average(ceil(7/2)=4) = 14, + conMod(0) = 14
     expect(deriveHitPointsMax(character, classesById, character.abilityScores)).toBe(14);
   });
+
+  it("lets a per-level roll override the very first (normally max) level", () => {
+    const character = baseCharacter({
+      classLevels: [{ classId: "fighter", level: 3, hpRolls: [4] }],
+      abilityScores: { ...createDefaultAbilityScores(10), con: 14 },
+    });
+    // rolled 4 instead of max(10) on level 1, + 2 average levels (6 each) = 16, + conMod(2)*3 = 6 -> 22
+    expect(deriveHitPointsMax(character, classesById, character.abilityScores)).toBe(22);
+  });
+
+  it("lets a per-level roll override a later (normally average) level, leaving others on default", () => {
+    const character = baseCharacter({
+      classLevels: [{ classId: "fighter", level: 3, hpRolls: [null, 8] }],
+      abilityScores: { ...createDefaultAbilityScores(10), con: 14 },
+    });
+    // max(10) + rolled(8) + average(6) = 24, + conMod(2)*3 = 6 -> 30
+    expect(deriveHitPointsMax(character, classesById, character.abilityScores)).toBe(30);
+  });
+});
+
+describe("deriveHitPointBreakdown", () => {
+  it("produces one row per level with the right default/override/total", () => {
+    const character = baseCharacter({
+      classLevels: [
+        { classId: "fighter", level: 1 },
+        { classId: "wizard", level: 1, hpRolls: [3] },
+      ],
+      abilityScores: { ...createDefaultAbilityScores(10), con: 12 },
+    });
+
+    const rows = deriveHitPointBreakdown(character, classesById, character.abilityScores);
+    expect(rows).toHaveLength(2);
+
+    expect(rows[0]).toMatchObject({
+      classId: "fighter",
+      isFirstOverall: true,
+      defaultRoll: 10,
+      override: null,
+      rollUsed: 10,
+      conMod: 1,
+      total: 11,
+    });
+    // wizard d6 average would be ceil(7/2)=4, but overridden to 3
+    expect(rows[1]).toMatchObject({
+      classId: "wizard",
+      isFirstOverall: false,
+      defaultRoll: 4,
+      override: 3,
+      rollUsed: 3,
+      conMod: 1,
+      total: 4,
+    });
+  });
+});
+
+describe("deriveSkillPointBudget", () => {
+  it("sums each class level's skill points (Core Rulebook min 1/level)", () => {
+    const character = baseCharacter({
+      raceId: "dwarf",
+      classLevels: [{ classId: "fighter", level: 3 }],
+      skills: [{ skillId: "climb", ranks: 4, miscModifier: 0 }],
+    });
+    // fighter: max(1, 2 + intMod(0)) = 2/level * 3 levels = 6, no racial bonus
+    expect(
+      deriveSkillPointBudget(character, classesById, racesById, character.abilityScores),
+    ).toEqual({ available: 6, spent: 4 });
+  });
+
+  it("adds the racial extra skill points per level (Human Skilled)", () => {
+    const character = baseCharacter({
+      raceId: "human",
+      classLevels: [{ classId: "fighter", level: 3 }],
+      skills: [],
+    });
+    // base 6 (as above) + Skilled(1/level * 3 total levels) = 9
+    expect(
+      deriveSkillPointBudget(character, classesById, racesById, character.abilityScores).available,
+    ).toBe(9);
+  });
+});
+
+describe("deriveExpectedFeatCount", () => {
+  it("is 0 with no levels", () => {
+    expect(deriveExpectedFeatCount(baseCharacter({ classLevels: [] }), racesById)).toBe(0);
+  });
+
+  it("follows the 1-per-odd-level rule with no racial bonus", () => {
+    const character = baseCharacter({
+      raceId: "dwarf",
+      classLevels: [{ classId: "fighter", level: 4 }],
+    });
+    expect(deriveExpectedFeatCount(character, racesById)).toBe(2);
+  });
+
+  it("adds a racial bonus feat slot (Human Bonus Feat)", () => {
+    const character = baseCharacter({
+      raceId: "human",
+      classLevels: [{ classId: "fighter", level: 1 }],
+    });
+    expect(deriveExpectedFeatCount(character, racesById)).toBe(2);
+  });
 });
 
 describe("resolveEquipmentDefenseBonuses", () => {
@@ -275,7 +492,12 @@ describe("resolveEquipmentDefenseBonuses", () => {
       inventoryItem({ id: "a", equipmentId: "studdedLeather", equipped: false }),
       inventoryItem({ id: "b", equipmentId: null, equipped: true }),
     ]);
-    expect(bonuses).toEqual({ armorBonus: 0, shieldBonus: 0, armorCheckPenalty: 0, armorMaxDexBonus: null });
+    expect(bonuses).toEqual({
+      armorBonus: 0,
+      shieldBonus: 0,
+      armorCheckPenalty: 0,
+      armorMaxDexBonus: null,
+    });
   });
 
   it("combines an equipped armor and shield, flipping check penalty to a positive magnitude", () => {
@@ -321,7 +543,9 @@ describe("deriveAttacks", () => {
     const character = baseCharacter({
       classLevels: [{ classId: "fighter", level: 3 }],
       abilityScores: { ...createDefaultAbilityScores(10), str: 16 },
-      inventory: [inventoryItem({ id: "sword", equipmentId: "longsword", name: "Longsword", equipped: true })],
+      inventory: [
+        inventoryItem({ id: "sword", equipmentId: "longsword", name: "Longsword", equipped: true }),
+      ],
     });
 
     const [attack] = deriveAttacks(character, classesById, racesById, {});
@@ -352,7 +576,12 @@ describe("deriveAttacks", () => {
           equipmentId: null,
           name: "Homebrew blade",
           equipped: true,
-          customWeapon: { damage: "2d6", critRange: "18-20", critMultiplier: 3, damageTypes: "fire, slashing" },
+          customWeapon: {
+            damage: "2d6",
+            critRange: "18-20",
+            critMultiplier: 3,
+            damageTypes: "fire, slashing",
+          },
         }),
       ],
     });

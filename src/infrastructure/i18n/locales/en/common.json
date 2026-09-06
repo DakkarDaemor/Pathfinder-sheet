@@ -77,7 +77,8 @@
       "class": "Class",
       "level": "Level",
       "totalLevel": "Total level",
-      "floatingAbilityChoice": "Floating racial bonus (+{{bonus}} to...)"
+      "floatingAbilityChoice": "Floating racial bonus (+{{bonus}} to...)",
+      "floatingSkillChoice": "Skill chosen for the racial trait (e.g. Obsessive)"
     },
     "abilities": {
       "score": "Score",
@@ -112,6 +113,12 @@
       "hpCurrent": "Current HP",
       "hpNonLethal": "Nonlethal Damage",
       "hpManual": "Manual entry",
+      "hpPerLevel": "HP per level",
+      "hpLevelColumn": "Level",
+      "hpClassColumn": "Class",
+      "hpRollColumn": "Hit Die",
+      "hpTotalColumn": "Total",
+      "hpRollsHint": "Leave blank to use the average (max on the first level); type your own roll if you'd rather roll the die.",
       "carryingCapacity": "Carrying Capacity",
       "light": "Light",
       "medium": "Medium",
@@ -146,10 +153,12 @@
       "classSkill": "Class Skill",
       "misc": "Misc",
       "total": "Total",
-      "trainedOnly": "Trained Only"
+      "trainedOnly": "Trained Only",
+      "pointsBudget": "Skill points: {{spent}} / {{available}} available"
     },
     "feats": {
       "heading": "Feats",
+      "expectedCount": "Feats: {{count}} / at least {{expected}} expected (excluding any class bonus feats)",
       "selectFeat": "Select a feat",
       "addCustom": "Add custom feat",
       "customName": "Feat name",

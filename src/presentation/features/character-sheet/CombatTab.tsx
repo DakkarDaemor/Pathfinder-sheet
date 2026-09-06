@@ -2,7 +2,11 @@ import { useTranslation } from "react-i18next";
 import { CLASSES_BY_ID } from "@/content/classes";
 import { FEATS_BY_ID } from "@/content/feats";
 import { RACES_BY_ID } from "@/content/races";
-import { deriveAttacks, deriveCombatSheet } from "@/domain/character/calculations";
+import {
+  deriveAttacks,
+  deriveCombatSheet,
+  deriveHitPointBreakdown,
+} from "@/domain/character/calculations";
 import type { PlayerCharacter } from "@/domain/character/types";
 import { formatModifier } from "@/domain/shared/abilities";
 import { Checkbox, Field, NumberInput } from "@/presentation/components/fields";
@@ -25,6 +29,11 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
   const { t } = useTranslation();
   const sheet = deriveCombatSheet(character, CLASSES_BY_ID, RACES_BY_ID, FEATS_BY_ID);
   const attacks = deriveAttacks(character, CLASSES_BY_ID, RACES_BY_ID, FEATS_BY_ID);
+  const hpBreakdown = deriveHitPointBreakdown(
+    character,
+    CLASSES_BY_ID,
+    sheet.effectiveAbilityScores,
+  );
 
   function updateDefense(patch: Partial<PlayerCharacter["defense"]>) {
     onChange((c) => ({ ...c, defense: { ...c.defense, ...patch } }));
@@ -34,6 +43,19 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
     onChange((c) => ({ ...c, hitPoints: { ...c.hitPoints, ...patch } }));
   }
 
+  function updateHpRoll(classIndex: number, levelIndexInClass: number, value: number | null) {
+    onChange((c) => ({
+      ...c,
+      classLevels: c.classLevels.map((cl, i) => {
+        if (i !== classIndex) return cl;
+        const rolls = [...(cl.hpRolls ?? [])];
+        while (rolls.length <= levelIndexInClass) rolls.push(null);
+        rolls[levelIndexInClass] = value;
+        return { ...cl, hpRolls: rolls };
+      }),
+    }));
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <section>
@@ -41,14 +63,20 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
         <div className="grid grid-cols-3 gap-3">
           <StatBox label={t("characterSheet.combat.acNormal")} value={sheet.armorClass.normal} />
           <StatBox label={t("characterSheet.combat.acTouch")} value={sheet.armorClass.touch} />
-          <StatBox label={t("characterSheet.combat.acFlatFooted")} value={sheet.armorClass.flatFooted} />
+          <StatBox
+            label={t("characterSheet.combat.acFlatFooted")}
+            value={sheet.armorClass.flatFooted}
+          />
         </div>
       </section>
 
       <section>
         <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.savingThrows")}</h3>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
-          <StatBox label={t("characterSheet.combat.baseAttackBonus")} value={`+${sheet.baseAttackBonus}`} />
+          <StatBox
+            label={t("characterSheet.combat.baseAttackBonus")}
+            value={`+${sheet.baseAttackBonus}`}
+          />
           <StatBox label={t("characterSheet.combat.fort")} value={`+${sheet.savingThrows.fort}`} />
           <StatBox label={t("characterSheet.combat.ref")} value={`+${sheet.savingThrows.ref}`} />
           <StatBox label={t("characterSheet.combat.will")} value={`+${sheet.savingThrows.will}`} />
@@ -69,18 +97,27 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
       <section>
         <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.encumbrance")}</h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatBox label={t("characterSheet.combat.carriedWeight")} value={sheet.encumbrance.totalWeight} />
+          <StatBox
+            label={t("characterSheet.combat.carriedWeight")}
+            value={sheet.encumbrance.totalWeight}
+          />
           <StatBox
             label={t("characterSheet.combat.encumbranceLevel")}
             value={t(`characterSheet.combat.encumbranceLevels.${sheet.encumbrance.level}`)}
           />
           <StatBox
             label={t("characterSheet.combat.speed")}
-            value={sheet.encumbrance.speed === null ? "—" : `${sheet.encumbrance.speed} ${t("characterSheet.combat.feet")}`}
+            value={
+              sheet.encumbrance.speed === null
+                ? "—"
+                : `${sheet.encumbrance.speed} ${t("characterSheet.combat.feet")}`
+            }
           />
         </div>
         {sheet.encumbrance.level !== "light" ? (
-          <p className="mt-2 text-xs text-muted-foreground">{t("characterSheet.combat.encumbranceHint")}</p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {t("characterSheet.combat.encumbranceHint")}
+          </p>
         ) : null}
       </section>
 
@@ -93,7 +130,9 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
             {attacks.map((attack) => {
               const damageTypes = attack.customDamageTypes
                 ? attack.damageTypes.join(", ")
-                : attack.damageTypes.map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`)).join(", ");
+                : attack.damageTypes
+                    .map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`))
+                    .join(", ");
               return (
                 <div
                   key={attack.inventoryItemId}
@@ -108,7 +147,8 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
                     {attack.damageBonus !== 0 ? formatModifier(attack.damageBonus) : ""}
                   </span>
                   <span className="text-muted-foreground">
-                    {t("characterSheet.inventory.critical")} {attack.critRange}/×{attack.critMultiplier} — {damageTypes}
+                    {t("characterSheet.inventory.critical")} {attack.critRange}/×
+                    {attack.critMultiplier} — {damageTypes}
                   </span>
                 </div>
               );
@@ -133,7 +173,10 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
             {character.hitPoints.autoMax ? (
               <NumberInput value={sheet.hitPointsMax} disabled />
             ) : (
-              <NumberInput value={character.hitPoints.max} onChange={(e) => updateHp({ max: Number(e.target.value) })} />
+              <NumberInput
+                value={character.hitPoints.max}
+                onChange={(e) => updateHp({ max: Number(e.target.value) })}
+              />
             )}
           </Field>
           <Field label={t("characterSheet.combat.hpCurrent")}>
@@ -149,16 +192,80 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
             />
           </Field>
         </div>
+        {character.hitPoints.autoMax && hpBreakdown.length > 0 ? (
+          <div className="mt-3">
+            <h4 className="mb-1 text-xs font-semibold text-muted-foreground">
+              {t("characterSheet.combat.hpPerLevel")}
+            </h4>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-xs text-muted-foreground">
+                    <th className="py-1 pr-2">{t("characterSheet.combat.hpLevelColumn")}</th>
+                    <th className="px-2 py-1">{t("characterSheet.combat.hpClassColumn")}</th>
+                    <th className="px-2 py-1 text-center">
+                      {t("characterSheet.combat.hpRollColumn")}
+                    </th>
+                    <th className="px-2 py-1 text-center">
+                      {t("characterSheet.combat.hpTotalColumn")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hpBreakdown.map((row, index) => {
+                    const classDef = CLASSES_BY_ID[row.classId];
+                    return (
+                      <tr
+                        key={`${row.classIndex}-${row.levelIndexInClass}`}
+                        className="border-b border-border/60"
+                      >
+                        <td className="py-1 pr-2">{index + 1}</td>
+                        <td className="px-2 py-1">
+                          {classDef ? t(classDef.nameKey) : row.classId}
+                        </td>
+                        <td className="px-2 py-1 text-center">
+                          <NumberInput
+                            aria-label={t("characterSheet.combat.hpRollColumn")}
+                            min={0}
+                            placeholder={String(row.defaultRoll)}
+                            value={row.override ?? ""}
+                            onChange={(e) =>
+                              updateHpRoll(
+                                row.classIndex,
+                                row.levelIndexInClass,
+                                e.target.value === "" ? null : Number(e.target.value),
+                              )
+                            }
+                            className="!w-16 text-center"
+                          />
+                        </td>
+                        <td className="px-2 py-1 text-center font-semibold">{row.total}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {t("characterSheet.combat.hpRollsHint")}
+            </p>
+          </div>
+        ) : null}
       </section>
 
       <section>
         <h3 className="mb-1 text-sm font-semibold">{t("characterSheet.combat.defenseLoadout")}</h3>
-        <p className="mb-2 text-xs text-muted-foreground">{t("characterSheet.combat.defenseLoadoutHint")}</p>
+        <p className="mb-2 text-xs text-muted-foreground">
+          {t("characterSheet.combat.defenseLoadoutHint")}
+        </p>
         <p className="mb-3 text-sm">
           {t("characterSheet.combat.fromEquipment")}: {t("characterSheet.combat.armorBonus")}{" "}
-          {formatModifier(sheet.equipmentDefenseBonuses.armorBonus)}, {t("characterSheet.combat.shieldBonus")}{" "}
-          {formatModifier(sheet.equipmentDefenseBonuses.shieldBonus)}, {t("characterSheet.combat.armorCheckPenalty")}{" "}
-          {formatModifier(-sheet.equipmentDefenseBonuses.armorCheckPenalty)}, {t("characterSheet.combat.armorMaxDexBonus")}{" "}
+          {formatModifier(sheet.equipmentDefenseBonuses.armorBonus)},{" "}
+          {t("characterSheet.combat.shieldBonus")}{" "}
+          {formatModifier(sheet.equipmentDefenseBonuses.shieldBonus)},{" "}
+          {t("characterSheet.combat.armorCheckPenalty")}{" "}
+          {formatModifier(-sheet.equipmentDefenseBonuses.armorCheckPenalty)},{" "}
+          {t("characterSheet.combat.armorMaxDexBonus")}{" "}
           {sheet.equipmentDefenseBonuses.armorMaxDexBonus === null
             ? "—"
             : formatModifier(sheet.equipmentDefenseBonuses.armorMaxDexBonus)}
@@ -181,7 +288,9 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
               value={character.defense.armorMaxDexBonus ?? ""}
               placeholder="∞"
               onChange={(e) =>
-                updateDefense({ armorMaxDexBonus: e.target.value === "" ? null : Number(e.target.value) })
+                updateDefense({
+                  armorMaxDexBonus: e.target.value === "" ? null : Number(e.target.value),
+                })
               }
             />
           </Field>

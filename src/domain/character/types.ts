@@ -6,6 +6,10 @@ import type { ArmorCategory, FeatType } from "@/content/types";
 export interface CharacterClassLevel {
   classId: string;
   level: number;
+  // Per-level hit-die override (index i = this class entry's level i+1), e.g. from a real dice
+  // roll instead of the "take average" default. null/absent at an index = use the default (max
+  // on the character's very first level ever, average — see averageHitDie — after that).
+  hpRolls?: (number | null)[];
 }
 
 export interface SkillRank {
@@ -95,6 +99,7 @@ export interface PlayerCharacter {
   classLevels: CharacterClassLevel[];
   abilityScores: AbilityScores; // base scores, before racial adjustments — see deriveEffectiveAbilityScores
   floatingAbilityChoice: AbilityName | null; // which ability gets the race's floatingAbilityBonus, if any
+  floatingSkillChoice: string | null; // which skill gets a race trait's skillFocusChoice bonus (e.g. Gnome Obsessive), if any
   hitPoints: HitPoints;
   defense: DefenseLoadout;
   skills: SkillRank[];

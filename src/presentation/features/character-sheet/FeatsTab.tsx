@@ -1,8 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { WEAPONS } from "@/content/equipment";
 import { FEATS, FEATS_BY_ID } from "@/content/feats";
+import { RACES_BY_ID } from "@/content/races";
 import { SKILLS } from "@/content/skills";
 import { FEAT_TYPES, type FeatType } from "@/content/types";
+import { deriveExpectedFeatCount } from "@/domain/character/calculations";
 import type { FeatSlot, PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
 import { Select, TextArea, TextInput } from "@/presentation/components/fields";
@@ -19,6 +21,7 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
   const sortedFeats = sortByLabel(FEATS, (feat) => t(feat.nameKey));
   const sortedSkills = sortByLabel(SKILLS, (skill) => t(skill.nameKey));
   const sortedWeapons = sortByLabel(WEAPONS, (weapon) => t(weapon.nameKey));
+  const expectedFeatCount = deriveExpectedFeatCount(character, RACES_BY_ID);
 
   function addFeat() {
     const firstFeat = FEATS[0];
@@ -71,6 +74,14 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
   return (
     <div>
       <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.feats.heading")}</h3>
+      <p
+        className={`mb-2 text-sm font-medium ${character.feats.length < expectedFeatCount ? "text-destructive" : "text-muted-foreground"}`}
+      >
+        {t("characterSheet.feats.expectedCount", {
+          count: character.feats.length,
+          expected: expectedFeatCount,
+        })}
+      </p>
       {character.feats.length === 0 ? (
         <p className="text-sm text-muted-foreground">{t("characterSheet.feats.empty")}</p>
       ) : (
@@ -116,7 +127,9 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                   <Select
                     aria-label={t("characterSheet.feats.selectedSkill")}
                     value={featSlot.selectedSkillId ?? ""}
-                    onChange={(e) => updateFeat(featSlot.id, { selectedSkillId: e.target.value || null })}
+                    onChange={(e) =>
+                      updateFeat(featSlot.id, { selectedSkillId: e.target.value || null })
+                    }
                     className="mb-2 !w-auto"
                   >
                     <option value="">{t("characterSheet.feats.selectedSkill")}</option>
@@ -131,7 +144,9 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                   <Select
                     aria-label={t("characterSheet.feats.selectedWeapon")}
                     value={featSlot.selectedWeaponId ?? ""}
-                    onChange={(e) => updateFeat(featSlot.id, { selectedWeaponId: e.target.value || null })}
+                    onChange={(e) =>
+                      updateFeat(featSlot.id, { selectedWeaponId: e.target.value || null })
+                    }
                     className="mb-2 !w-auto"
                   >
                     <option value="">{t("characterSheet.feats.selectedWeapon")}</option>
@@ -147,7 +162,9 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                     <Select
                       aria-label={t("characterSheet.feats.customType")}
                       value={featSlot.customType}
-                      onChange={(e) => updateFeat(featSlot.id, { customType: e.target.value as FeatType })}
+                      onChange={(e) =>
+                        updateFeat(featSlot.id, { customType: e.target.value as FeatType })
+                      }
                       className="mb-2 !w-auto"
                     >
                       {FEAT_TYPES.map((type) => (
@@ -162,7 +179,9 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                       rows={2}
                       className="mb-2"
                       value={featSlot.customDescription}
-                      onChange={(e) => updateFeat(featSlot.id, { customDescription: e.target.value })}
+                      onChange={(e) =>
+                        updateFeat(featSlot.id, { customDescription: e.target.value })
+                      }
                     />
                   </>
                 ) : null}

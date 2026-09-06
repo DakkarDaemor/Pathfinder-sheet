@@ -8,6 +8,27 @@ import type { CompanionKind } from "@/domain/character/types";
  * display strings, so IT/EN stay in sync with the data instead of hardcoded text.
  */
 
+/**
+ * A structured, automatically-applied numeric effect for the handful of racial traits whose
+ * benefit is a flat, *unconditional* bonus (e.g. Keen Senses: always +2 Perception). Most
+ * traits are situational (only apply against certain enemies/materials/effects, e.g. Dwarf
+ * Hardy: +2 on saves vs poison/spells/spell-like abilities, not on saves in general) and stay
+ * purely descriptive with no `effects` — auto-applying those would give a wrong bonus most of
+ * the time. `skillFocusChoice` needs the player to pick a target skill — see
+ * `PlayerCharacter.floatingSkillChoice`.
+ */
+export type RaceTraitEffect =
+  | { kind: "skillBonus"; skillId: string; bonus: number }
+  | { kind: "skillFocusChoice"; bonus: number }
+  | { kind: "savingThrowAll"; bonus: number }
+  | { kind: "extraSkillPointPerLevel"; bonus: number }
+  | { kind: "bonusFeatSlot"; count: number };
+
+export interface RaceTrait {
+  nameKey: string; // short descriptive racial trait (darkvision, etc.)
+  effects?: RaceTraitEffect[]; // absent = purely descriptive, same as before this existed
+}
+
 export interface RaceDefinition {
   id: string;
   nameKey: string;
@@ -15,7 +36,7 @@ export interface RaceDefinition {
   speed: number;
   abilityAdjustments: Partial<AbilityScores>;
   floatingAbilityBonus?: number; // e.g. Human/Half-Elf/Half-Orc: player picks one ability for +N
-  traitKeys: string[]; // short descriptive racial traits (darkvision, etc.)
+  traits: RaceTrait[];
 }
 
 export interface ClassFeature {

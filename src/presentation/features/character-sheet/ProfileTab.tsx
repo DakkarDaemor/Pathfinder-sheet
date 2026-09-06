@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { RACES, RACES_BY_ID } from "@/content/races";
 import { CLASSES } from "@/content/classes";
+import { SKILLS } from "@/content/skills";
 import { ABILITY_NAMES, type AbilityName } from "@/domain/shared/abilities";
 import { SIZE_CATEGORIES } from "@/domain/shared/size";
 import { totalCharacterLevel, type PlayerCharacter } from "@/domain/character/types";
@@ -19,10 +20,17 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
   const { t } = useTranslation();
   const sortedRaces = sortByLabel(RACES, (race) => t(race.nameKey));
   const sortedClasses = sortByLabel(CLASSES, (klass) => t(klass.nameKey));
+  const sortedSkills = sortByLabel(SKILLS, (skill) => t(skill.nameKey));
   const race = RACES_BY_ID[character.raceId];
+  const hasSkillFocusChoice =
+    race?.traits.some((trait) =>
+      trait.effects?.some((effect) => effect.kind === "skillFocusChoice"),
+    ) ?? false;
 
   function addClassLevel() {
-    const firstUnused = CLASSES.find((c) => !character.classLevels.some((cl) => cl.classId === c.id));
+    const firstUnused = CLASSES.find(
+      (c) => !character.classLevels.some((cl) => cl.classId === c.id),
+    );
     const classId = firstUnused?.id ?? CLASSES[0]?.id ?? "fighter";
     onChange((c) => ({ ...c, classLevels: [...c.classLevels, { classId, level: 1 }] }));
   }
@@ -41,7 +49,10 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Field label={t("characterSheet.profile.name")}>
-        <TextInput value={character.name} onChange={(e) => onChange((c) => ({ ...c, name: e.target.value }))} />
+        <TextInput
+          value={character.name}
+          onChange={(e) => onChange((c) => ({ ...c, name: e.target.value }))}
+        />
       </Field>
       <Field label={t("characterSheet.profile.playerName")}>
         <TextInput
@@ -51,7 +62,13 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
       </Field>
 
       <Field label={t("characterSheet.profile.race")}>
-        <Select value={character.raceId} onChange={(e) => onChange((c) => ({ ...c, raceId: e.target.value }))}>
+        <Select
+          value={character.raceId}
+          onChange={(e) => {
+            const newRace = RACES_BY_ID[e.target.value];
+            onChange((c) => ({ ...c, raceId: e.target.value, size: newRace?.size ?? c.size }));
+          }}
+        >
           {sortedRaces.map((r) => (
             <option key={r.id} value={r.id}>
               {t(r.nameKey)}
@@ -60,11 +77,18 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
         </Select>
       </Field>
       {race?.floatingAbilityBonus ? (
-        <Field label={t("characterSheet.profile.floatingAbilityChoice", { bonus: race.floatingAbilityBonus })}>
+        <Field
+          label={t("characterSheet.profile.floatingAbilityChoice", {
+            bonus: race.floatingAbilityBonus,
+          })}
+        >
           <Select
             value={character.floatingAbilityChoice ?? ""}
             onChange={(e) =>
-              onChange((c) => ({ ...c, floatingAbilityChoice: (e.target.value || null) as AbilityName | null }))
+              onChange((c) => ({
+                ...c,
+                floatingAbilityChoice: (e.target.value || null) as AbilityName | null,
+              }))
             }
           >
             <option value="" />
@@ -76,8 +100,30 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
           </Select>
         </Field>
       ) : null}
+      {hasSkillFocusChoice ? (
+        <Field label={t("characterSheet.profile.floatingSkillChoice")}>
+          <Select
+            value={character.floatingSkillChoice ?? ""}
+            onChange={(e) =>
+              onChange((c) => ({ ...c, floatingSkillChoice: e.target.value || null }))
+            }
+          >
+            <option value="" />
+            {sortedSkills.map((skill) => (
+              <option key={skill.id} value={skill.id}>
+                {t(skill.nameKey)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      ) : null}
       <Field label={t("characterSheet.profile.size")}>
-        <Select value={character.size} onChange={(e) => onChange((c) => ({ ...c, size: e.target.value as PlayerCharacter["size"] }))}>
+        <Select
+          value={character.size}
+          onChange={(e) =>
+            onChange((c) => ({ ...c, size: e.target.value as PlayerCharacter["size"] }))
+          }
+        >
           {SIZE_CATEGORIES.map((size) => (
             <option key={size} value={size}>
               {t(`srd:size.${size}`)}
@@ -87,7 +133,10 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
       </Field>
 
       <Field label={t("characterSheet.profile.alignment")}>
-        <Select value={character.alignment} onChange={(e) => onChange((c) => ({ ...c, alignment: e.target.value }))}>
+        <Select
+          value={character.alignment}
+          onChange={(e) => onChange((c) => ({ ...c, alignment: e.target.value }))}
+        >
           <option value="" />
           {ALIGNMENTS.map((a) => (
             <option key={a} value={a}>
@@ -97,7 +146,10 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
         </Select>
       </Field>
       <Field label={t("characterSheet.profile.deity")}>
-        <TextInput value={character.deity} onChange={(e) => onChange((c) => ({ ...c, deity: e.target.value }))} />
+        <TextInput
+          value={character.deity}
+          onChange={(e) => onChange((c) => ({ ...c, deity: e.target.value }))}
+        />
       </Field>
 
       <div className="sm:col-span-2">
