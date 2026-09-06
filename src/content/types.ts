@@ -47,12 +47,28 @@ export interface SkillDefinition {
 export const FEAT_TYPES = ["combat", "general", "item-creation", "metamagic", "other"] as const;
 export type FeatType = (typeof FEAT_TYPES)[number];
 
+/**
+ * A structured, automatically-applied numeric effect for the handful of feats whose benefit is
+ * a flat, unconditional bonus — most feats (situational, or requiring GM/player judgment) have
+ * no `effect` and stay purely descriptive, same as before. `skillFocus` and `weaponAttackBonus`
+ * each need the player to pick a target (skill / weapon) — see `FeatSlot.selectedSkillId` and
+ * `FeatSlot.selectedWeaponId`.
+ */
+export type FeatEffect =
+  | { kind: "savingThrow"; save: "fort" | "ref" | "will"; bonus: number }
+  | { kind: "initiative"; bonus: number }
+  | { kind: "dodgeAc"; bonus: number }
+  | { kind: "hitPoints" } // Toughness: +3 hp, or (HD count) hp once HD > 3
+  | { kind: "skillFocus"; bonus: number; bonusAtTenRanks: number }
+  | { kind: "weaponAttackBonus"; bonus: number };
+
 export interface FeatDefinition {
   id: string;
   nameKey: string;
   descriptionKey: string;
   prerequisiteKey: string | null;
   type: FeatType;
+  effect?: FeatEffect;
 }
 
 export interface SpellDefinition {

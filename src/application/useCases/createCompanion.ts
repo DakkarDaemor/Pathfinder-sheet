@@ -19,7 +19,7 @@ export function createNewCompanion(
     name,
     masterCharacterId,
     abilityScoreOverrides: {},
-    hitPoints: { max: 0, current: 0, nonLethal: 0 },
+    hitPoints: { max: 0, current: 0, nonLethal: 0, autoMax: false },
     defense: createDefaultDefenseLoadout(),
     tricksOrTraits: [],
     notes: "",

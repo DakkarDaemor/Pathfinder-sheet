@@ -1,7 +1,7 @@
-import type { AbilityScores } from "@/domain/shared/abilities";
+import type { AbilityName, AbilityScores } from "@/domain/shared/abilities";
 import type { DefenseLoadout } from "@/domain/shared/creature";
 import type { SizeCategory } from "@/domain/shared/size";
-import type { FeatType } from "@/content/types";
+import type { ArmorCategory, FeatType } from "@/content/types";
 
 export interface CharacterClassLevel {
   classId: string;
@@ -21,7 +21,28 @@ export interface FeatSlot {
   customName: string;
   customDescription: string;
   customType: FeatType; // only meaningful when featId is null; lets custom feats count toward type-gated bonus feats
+  selectedSkillId: string | null; // only meaningful for a feat whose effect is "skillFocus" (the chosen skill)
+  selectedWeaponId: string | null; // only meaningful for a feat whose effect is "weaponAttackBonus" (reference into content/equipment.ts)
   notes: string;
+}
+
+/** Structured homebrew weapon stats, mirroring WeaponDefinition; only meaningful when equipmentId is null. */
+export interface CustomWeaponStats {
+  damage: string; // dice expression, e.g. "1d8"
+  critRange: string; // e.g. "19-20" or "20"
+  critMultiplier: number;
+  damageTypes: string; // free text (not i18n-mapped, unlike the catalog's damageTypes keys), e.g. "slashing, fire"
+}
+
+/**
+ * Structured homebrew armor/shield stats, mirroring ArmorDefinition; only meaningful when
+ * equipmentId is null. `checkPenalty` follows ArmorDefinition's convention (zero or negative).
+ */
+export interface CustomArmorStats {
+  category: ArmorCategory;
+  acBonus: number;
+  maxDexBonus: number | null;
+  checkPenalty: number;
 }
 
 export interface InventoryItem {
@@ -31,7 +52,9 @@ export interface InventoryItem {
   quantity: number;
   weight: number;
   equipped: boolean;
-  customQualities: string; // only meaningful when equipmentId is null: damage/AC/special abilities
+  customQualities: string; // only meaningful when equipmentId is null: flavor text/special abilities
+  customWeapon: CustomWeaponStats | null; // set to give a custom item an attack entry, same as a catalog weapon
+  customArmor: CustomArmorStats | null; // set to give a custom item an AC contribution, same as catalog armor
   notes: string;
 }
 
@@ -41,7 +64,8 @@ export interface KnownSpell {
   customName: string;
   customDescription: string;
   customSchool: string; // only meaningful when spellId is null
-  customLevel: number; // only meaningful when spellId is null; enables future spell-slot tracking
+  customLevel: number; // only meaningful when spellId is null
+  customSpellcastingClassId: string | null; // only meaningful when spellId is null; picks which known class's ability/table computes its DC and slot
   prepared: boolean;
 }
 
@@ -49,6 +73,7 @@ export interface HitPoints {
   max: number;
   current: number;
   nonLethal: number;
+  autoMax: boolean; // when true, `max` is computed from class hit dice + Con instead of read directly
 }
 
 export type CompanionKind = "animal-companion" | "familiar" | "mount";
@@ -68,7 +93,8 @@ export interface PlayerCharacter {
   deity: string;
   size: SizeCategory;
   classLevels: CharacterClassLevel[];
-  abilityScores: AbilityScores;
+  abilityScores: AbilityScores; // base scores, before racial adjustments — see deriveEffectiveAbilityScores
+  floatingAbilityChoice: AbilityName | null; // which ability gets the race's floatingAbilityBonus, if any
   hitPoints: HitPoints;
   defense: DefenseLoadout;
   skills: SkillRank[];

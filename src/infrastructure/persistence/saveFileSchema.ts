@@ -11,11 +11,31 @@ const abilityScoresSchema = z.object(
 );
 
 const sizeCategorySchema = z.enum(SIZE_CATEGORIES);
+const abilityNameSchema = z.enum(ABILITY_NAMES);
 
 const hitPointsSchema = z.object({
   max: z.number(),
   current: z.number(),
   nonLethal: z.number(),
+  // Missing on save files predating HP automation: default to false so existing manually-entered
+  // HP values are never silently overridden by the computed value on load.
+  autoMax: z.boolean().default(false),
+});
+
+const armorCategorySchema = z.enum(["light", "medium", "heavy", "shield"]);
+
+const customWeaponStatsSchema = z.object({
+  damage: z.string(),
+  critRange: z.string(),
+  critMultiplier: z.number(),
+  damageTypes: z.string(),
+});
+
+const customArmorStatsSchema = z.object({
+  category: armorCategorySchema,
+  acBonus: z.number(),
+  maxDexBonus: z.number().nullable(),
+  checkPenalty: z.number(),
 });
 
 const defenseLoadoutSchema = z.object({
@@ -53,6 +73,7 @@ const characterSchema = z.object({
   size: sizeCategorySchema,
   classLevels: z.array(z.object({ classId: z.string(), level: z.number() })),
   abilityScores: abilityScoresSchema,
+  floatingAbilityChoice: abilityNameSchema.nullable().default(null),
   hitPoints: hitPointsSchema,
   defense: defenseLoadoutSchema,
   skills: z.array(
@@ -70,6 +91,8 @@ const characterSchema = z.object({
       customName: z.string(),
       customDescription: z.string(),
       customType: featTypeSchema,
+      selectedSkillId: z.string().nullable().default(null),
+      selectedWeaponId: z.string().nullable().default(null),
       notes: z.string(),
     }),
   ),
@@ -83,6 +106,8 @@ const characterSchema = z.object({
       weight: z.number(),
       equipped: z.boolean(),
       customQualities: z.string(),
+      customWeapon: customWeaponStatsSchema.nullable().default(null),
+      customArmor: customArmorStatsSchema.nullable().default(null),
       notes: z.string(),
     }),
   ),
@@ -94,6 +119,7 @@ const characterSchema = z.object({
       customDescription: z.string(),
       customSchool: z.string(),
       customLevel: z.number(),
+      customSpellcastingClassId: z.string().nullable().default(null),
       prepared: z.boolean(),
     }),
   ),

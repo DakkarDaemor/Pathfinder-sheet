@@ -76,7 +76,8 @@
       "addClass": "Add class",
       "class": "Class",
       "level": "Level",
-      "totalLevel": "Total level"
+      "totalLevel": "Total level",
+      "floatingAbilityChoice": "Floating racial bonus (+{{bonus}} to...)"
     },
     "abilities": {
       "score": "Score",
@@ -86,7 +87,8 @@
       "con": "Constitution",
       "int": "Intelligence",
       "wis": "Wisdom",
-      "cha": "Charisma"
+      "cha": "Charisma",
+      "withRace": "{{score}} with race ({{adjustment}})"
     },
     "combat": {
       "armorClass": "Armor Class",
@@ -109,10 +111,23 @@
       "hpMax": "Max HP",
       "hpCurrent": "Current HP",
       "hpNonLethal": "Nonlethal Damage",
+      "hpManual": "Manual entry",
       "carryingCapacity": "Carrying Capacity",
       "light": "Light",
       "medium": "Medium",
       "heavy": "Heavy",
+      "encumbrance": "Encumbrance",
+      "carriedWeight": "Carried weight",
+      "encumbranceLevel": "Encumbrance level",
+      "encumbranceLevels": {
+        "light": "Light",
+        "medium": "Medium",
+        "heavy": "Heavy",
+        "overloaded": "Overloaded"
+      },
+      "speed": "Speed",
+      "feet": "ft.",
+      "encumbranceHint": "A medium/heavy load caps your max Dex to AC, applies a check penalty, and reduces speed — the same as wearing medium/heavy armor — stacking with any penalty from armor you're actually wearing.",
       "defenseLoadout": "Defense Modifiers",
       "defenseLoadoutHint": "These stack on top of the bonuses already computed from your equipped armor/shield below — use them for enhancement bonuses or anything not covered by the catalog.",
       "fromEquipment": "From equipped gear",
@@ -148,7 +163,9 @@
         "other": "Other"
       },
       "notes": "Notes",
-      "empty": "No feats added yet."
+      "empty": "No feats added yet.",
+      "selectedSkill": "Selected skill",
+      "selectedWeapon": "Selected weapon"
     },
     "inventory": {
       "heading": "Inventory",
@@ -169,7 +186,21 @@
         "slashing": "Slashing",
         "bludgeoning": "Bludgeoning"
       },
-      "customQualities": "Qualities / special abilities"
+      "customQualities": "Qualities / special abilities",
+      "customKind": "Kind",
+      "customKindNone": "None",
+      "customKindWeapon": "Weapon",
+      "customKindArmor": "Armor / Shield",
+      "customCritRange": "Crit range",
+      "customCritMultiplier": "Crit multiplier",
+      "customDamageTypes": "Damage types (free text)",
+      "customArmorCategory": "Category",
+      "armorCategories": {
+        "light": "Light",
+        "medium": "Medium",
+        "heavy": "Heavy",
+        "shield": "Shield"
+      }
     },
     "spells": {
       "heading": "Spells",
@@ -179,8 +210,11 @@
       "customDescription": "Description",
       "customSchool": "School",
       "customLevel": "Level",
+      "customCastingClass": "Casting class",
       "prepared": "Prepared",
-      "empty": "No spells known yet."
+      "empty": "No spells known yet.",
+      "slotsPerDay": "Spells per day",
+      "dc": "DC {{dc}}"
     },
     "companions": {
       "heading": "Companions",

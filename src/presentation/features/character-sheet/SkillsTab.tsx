@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { CLASSES_BY_ID } from "@/content/classes";
+import { FEATS_BY_ID } from "@/content/feats";
+import { RACES_BY_ID } from "@/content/races";
 import { SKILLS, SKILLS_BY_ID } from "@/content/skills";
 import { deriveSkillTotals } from "@/domain/character/calculations";
 import type { PlayerCharacter } from "@/domain/character/types";
@@ -12,7 +14,7 @@ interface SkillsTabProps {
 
 export function SkillsTab({ character, onChange }: SkillsTabProps) {
   const { t } = useTranslation();
-  const totals = deriveSkillTotals(character, CLASSES_BY_ID, SKILLS_BY_ID);
+  const totals = deriveSkillTotals(character, CLASSES_BY_ID, SKILLS_BY_ID, RACES_BY_ID, FEATS_BY_ID);
   const totalsBySkillId = Object.fromEntries(totals.map((total) => [total.skillId, total]));
 
   function updateSkill(skillId: string, patch: Partial<{ ranks: number; miscModifier: number }>) {

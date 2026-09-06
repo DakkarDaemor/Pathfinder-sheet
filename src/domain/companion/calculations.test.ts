@@ -14,7 +14,7 @@ function makeCompanion(overrides: Partial<Companion>): Companion {
     name: "Fang",
     masterCharacterId: "character-1",
     abilityScoreOverrides: {},
-    hitPoints: { max: 0, current: 0, nonLethal: 0 },
+    hitPoints: { max: 0, current: 0, nonLethal: 0, autoMax: false },
     defense: {
       armorBonus: 0,
       armorMaxDexBonus: null,

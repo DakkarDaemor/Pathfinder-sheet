@@ -43,3 +43,54 @@ export function calculateCarryingCapacity(strength: number, size: SizeCategory =
     heavy: Math.floor(heavy),
   };
 }
+
+export type EncumbranceLevel = "light" | "medium" | "heavy" | "overloaded";
+
+/** Core Rulebook carrying-capacity rule: which band a total carried weight falls into. */
+export function resolveEncumbranceLevel(totalWeight: number, capacity: CarryingCapacity): EncumbranceLevel {
+  if (totalWeight <= capacity.light) return "light";
+  if (totalWeight <= capacity.medium) return "medium";
+  if (totalWeight <= capacity.heavy) return "heavy";
+  return "overloaded";
+}
+
+export interface EncumbrancePenalty {
+  maxDexBonus: number | null;
+  checkPenalty: number;
+}
+
+// Core Rulebook: a medium or heavy load imposes the same max Dex bonus / check penalty as
+// wearing medium/heavy armor, regardless of armor actually worn. An overloaded character
+// (over their heavy load) is treated the same as heavy for these two penalties; the rulebook's
+// separate "can't move" consequence of being overloaded isn't modeled here.
+const ENCUMBRANCE_PENALTY: Record<EncumbranceLevel, EncumbrancePenalty> = {
+  light: { maxDexBonus: null, checkPenalty: 0 },
+  medium: { maxDexBonus: 3, checkPenalty: -3 },
+  heavy: { maxDexBonus: 1, checkPenalty: -6 },
+  overloaded: { maxDexBonus: 1, checkPenalty: -6 },
+};
+
+export function encumbrancePenaltyFor(level: EncumbranceLevel): EncumbrancePenalty {
+  return ENCUMBRANCE_PENALTY[level];
+}
+
+// Core Rulebook Table: Speed reduction for a medium or heavy load (light load: no reduction).
+const ENCUMBERED_SPEED: Record<number, number> = {
+  5: 5,
+  10: 5,
+  15: 10,
+  20: 15,
+  30: 20,
+  40: 30,
+  50: 35,
+  60: 40,
+  70: 50,
+  80: 55,
+  90: 60,
+};
+
+/** Reduced speed while carrying a medium or heavy load; light load (or an unlisted base speed) is unaffected. */
+export function encumberedSpeed(baseSpeed: number, level: EncumbranceLevel): number {
+  if (level === "light") return baseSpeed;
+  return ENCUMBERED_SPEED[baseSpeed] ?? baseSpeed;
+}

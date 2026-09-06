@@ -1,12 +1,13 @@
-import type { FeatDefinition } from "./types";
+import type { FeatDefinition, FeatEffect } from "./types";
 
-function feat(id: string, type: FeatDefinition["type"], hasPrerequisite = false): FeatDefinition {
+function feat(id: string, type: FeatDefinition["type"], hasPrerequisite = false, effect?: FeatEffect): FeatDefinition {
   return {
     id,
     nameKey: `srd:feat.${id}.name`,
     descriptionKey: `srd:feat.${id}.description`,
     prerequisiteKey: hasPrerequisite ? `srd:feat.${id}.prerequisite` : null,
     type,
+    effect,
   };
 }
 
@@ -26,25 +27,25 @@ export const FEATS: FeatDefinition[] = [
   feat("deceitful", "general"),
   feat("deflectArrows", "combat", true),
   feat("diehard", "general", true),
-  feat("dodge", "combat", true),
+  feat("dodge", "combat", true, { kind: "dodgeAc", bonus: 1 }),
   feat("endurance", "general"),
   feat("greatCleave", "combat", true),
-  feat("greatFortitude", "general"),
+  feat("greatFortitude", "general", false, { kind: "savingThrow", save: "fort", bonus: 2 }),
   feat("improvedBullRush", "combat", true),
   feat("improvedCounterspell", "combat"),
   feat("improvedCritical", "combat", true),
   feat("improvedDisarm", "combat", true),
   feat("improvedFeint", "combat", true),
   feat("improvedGrapple", "combat", true),
-  feat("improvedInitiative", "combat"),
+  feat("improvedInitiative", "combat", false, { kind: "initiative", bonus: 4 }),
   feat("improvedOverrun", "combat", true),
   feat("improvedShieldBash", "combat", true),
   feat("improvedSunder", "combat", true),
   feat("improvedTrip", "combat", true),
   feat("improvedTwoWeaponFighting", "combat", true),
   feat("improvedUnarmedStrike", "combat"),
-  feat("ironWill", "general"),
-  feat("lightningReflexes", "general"),
+  feat("ironWill", "general", false, { kind: "savingThrow", save: "will", bonus: 2 }),
+  feat("lightningReflexes", "general", false, { kind: "savingThrow", save: "ref", bonus: 2 }),
   feat("manyshot", "combat", true),
   feat("mobility", "combat", true),
   feat("mountedCombat", "combat", true),
@@ -55,14 +56,14 @@ export const FEATS: FeatDefinition[] = [
   feat("run", "general"),
   feat("selfSufficient", "general"),
   feat("shotOnTheRun", "combat", true),
-  feat("skillFocus", "general"),
+  feat("skillFocus", "general", false, { kind: "skillFocus", bonus: 3, bonusAtTenRanks: 6 }),
   feat("springAttack", "combat", true),
   feat("stealthy", "general"),
-  feat("toughness", "general"),
+  feat("toughness", "general", false, { kind: "hitPoints" }),
   feat("twoWeaponFighting", "combat", true),
   feat("vitalStrike", "combat", true),
   feat("weaponFinesse", "combat"),
-  feat("weaponFocus", "combat", true),
+  feat("weaponFocus", "combat", true, { kind: "weaponAttackBonus", bonus: 1 }),
 ];
 
 export const FEATS_BY_ID: Record<string, FeatDefinition> = Object.fromEntries(FEATS.map((f) => [f.id, f]));

@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { CLASSES_BY_ID } from "@/content/classes";
+import { FEATS_BY_ID } from "@/content/feats";
+import { RACES_BY_ID } from "@/content/races";
 import { deriveAttacks, deriveCombatSheet } from "@/domain/character/calculations";
 import type { PlayerCharacter } from "@/domain/character/types";
 import { formatModifier } from "@/domain/shared/abilities";
-import { Field, NumberInput } from "@/presentation/components/fields";
+import { Checkbox, Field, NumberInput } from "@/presentation/components/fields";
 
 interface CombatTabProps {
   character: PlayerCharacter;
@@ -21,8 +23,8 @@ function StatBox({ label, value }: { label: string; value: number | string }) {
 
 export function CombatTab({ character, onChange }: CombatTabProps) {
   const { t } = useTranslation();
-  const sheet = deriveCombatSheet(character, CLASSES_BY_ID);
-  const attacks = deriveAttacks(character, CLASSES_BY_ID);
+  const sheet = deriveCombatSheet(character, CLASSES_BY_ID, RACES_BY_ID, FEATS_BY_ID);
+  const attacks = deriveAttacks(character, CLASSES_BY_ID, RACES_BY_ID, FEATS_BY_ID);
 
   function updateDefense(patch: Partial<PlayerCharacter["defense"]>) {
     onChange((c) => ({ ...c, defense: { ...c.defense, ...patch } }));
@@ -65,15 +67,33 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
       </section>
 
       <section>
+        <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.encumbrance")}</h3>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatBox label={t("characterSheet.combat.carriedWeight")} value={sheet.encumbrance.totalWeight} />
+          <StatBox
+            label={t("characterSheet.combat.encumbranceLevel")}
+            value={t(`characterSheet.combat.encumbranceLevels.${sheet.encumbrance.level}`)}
+          />
+          <StatBox
+            label={t("characterSheet.combat.speed")}
+            value={sheet.encumbrance.speed === null ? "—" : `${sheet.encumbrance.speed} ${t("characterSheet.combat.feet")}`}
+          />
+        </div>
+        {sheet.encumbrance.level !== "light" ? (
+          <p className="mt-2 text-xs text-muted-foreground">{t("characterSheet.combat.encumbranceHint")}</p>
+        ) : null}
+      </section>
+
+      <section>
         <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.attacks")}</h3>
         {attacks.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("characterSheet.combat.attacksEmpty")}</p>
         ) : (
           <div className="flex flex-col gap-2">
             {attacks.map((attack) => {
-              const damageTypes = attack.damageTypes
-                .map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`))
-                .join(", ");
+              const damageTypes = attack.customDamageTypes
+                ? attack.damageTypes.join(", ")
+                : attack.damageTypes.map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`)).join(", ");
               return (
                 <div
                   key={attack.inventoryItemId}
@@ -98,10 +118,23 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
       </section>
 
       <section>
-        <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.hitPoints")}</h3>
+        <div className="mb-2 flex items-center justify-between">
+          <h3 className="text-sm font-semibold">{t("characterSheet.combat.hitPoints")}</h3>
+          <label className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Checkbox
+              checked={!character.hitPoints.autoMax}
+              onChange={(e) => updateHp({ autoMax: !e.target.checked })}
+            />
+            {t("characterSheet.combat.hpManual")}
+          </label>
+        </div>
         <div className="grid grid-cols-3 gap-3">
           <Field label={t("characterSheet.combat.hpMax")}>
-            <NumberInput value={character.hitPoints.max} onChange={(e) => updateHp({ max: Number(e.target.value) })} />
+            {character.hitPoints.autoMax ? (
+              <NumberInput value={sheet.hitPointsMax} disabled />
+            ) : (
+              <NumberInput value={character.hitPoints.max} onChange={(e) => updateHp({ max: Number(e.target.value) })} />
+            )}
           </Field>
           <Field label={t("characterSheet.combat.hpCurrent")}>
             <NumberInput

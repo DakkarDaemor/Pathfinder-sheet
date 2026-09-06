@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculateCarryingCapacity } from "./encumbrance";
+import { calculateCarryingCapacity, encumberedSpeed, encumbrancePenaltyFor, resolveEncumbranceLevel } from "./encumbrance";
 
 describe("calculateCarryingCapacity", () => {
   it("matches the Core Rulebook table for a medium creature", () => {
@@ -25,5 +25,41 @@ describe("calculateCarryingCapacity", () => {
     const small = calculateCarryingCapacity(10, "small").heavy;
     expect(large).toBe(medium * 4);
     expect(small).toBe(Math.floor(medium / 4));
+  });
+});
+
+describe("resolveEncumbranceLevel", () => {
+  it("buckets total weight into light/medium/heavy/overloaded", () => {
+    const capacity = calculateCarryingCapacity(10); // light 11, medium 22, heavy 33
+    expect(resolveEncumbranceLevel(10, capacity)).toBe("light");
+    expect(resolveEncumbranceLevel(20, capacity)).toBe("medium");
+    expect(resolveEncumbranceLevel(30, capacity)).toBe("heavy");
+    expect(resolveEncumbranceLevel(40, capacity)).toBe("overloaded");
+  });
+});
+
+describe("encumbrancePenaltyFor", () => {
+  it("has no penalty while lightly loaded", () => {
+    expect(encumbrancePenaltyFor("light")).toEqual({ maxDexBonus: null, checkPenalty: 0 });
+  });
+
+  it("matches medium/heavy armor's max Dex cap and check penalty", () => {
+    expect(encumbrancePenaltyFor("medium")).toEqual({ maxDexBonus: 3, checkPenalty: -3 });
+    expect(encumbrancePenaltyFor("heavy")).toEqual({ maxDexBonus: 1, checkPenalty: -6 });
+  });
+});
+
+describe("encumberedSpeed", () => {
+  it("leaves speed untouched under a light load", () => {
+    expect(encumberedSpeed(30, "light")).toBe(30);
+  });
+
+  it("reduces known base speeds under a medium or heavy load", () => {
+    expect(encumberedSpeed(30, "medium")).toBe(20);
+    expect(encumberedSpeed(20, "heavy")).toBe(15);
+  });
+
+  it("leaves an unlisted base speed unchanged", () => {
+    expect(encumberedSpeed(35, "heavy")).toBe(35);
   });
 });

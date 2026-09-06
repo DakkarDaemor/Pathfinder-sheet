@@ -76,7 +76,8 @@
       "addClass": "Aggiungi classe",
       "class": "Classe",
       "level": "Livello",
-      "totalLevel": "Livello totale"
+      "totalLevel": "Livello totale",
+      "floatingAbilityChoice": "Bonus razziale libero (+{{bonus}} a...)"
     },
     "abilities": {
       "score": "Punteggio",
@@ -86,7 +87,8 @@
       "con": "Costituzione",
       "int": "Intelligenza",
       "wis": "Saggezza",
-      "cha": "Carisma"
+      "cha": "Carisma",
+      "withRace": "{{score}} con la razza ({{adjustment}})"
     },
     "combat": {
       "armorClass": "Classe Armatura",
@@ -109,10 +111,23 @@
       "hpMax": "PF Massimi",
       "hpCurrent": "PF Attuali",
       "hpNonLethal": "Danno Non Letale",
+      "hpManual": "Inserimento manuale",
       "carryingCapacity": "Capacità di Carico",
       "light": "Leggero",
       "medium": "Medio",
       "heavy": "Pesante",
+      "encumbrance": "Ingombro",
+      "carriedWeight": "Peso trasportato",
+      "encumbranceLevel": "Livello di ingombro",
+      "encumbranceLevels": {
+        "light": "Leggero",
+        "medium": "Medio",
+        "heavy": "Pesante",
+        "overloaded": "Sovraccarico"
+      },
+      "speed": "Velocità",
+      "feet": "piedi",
+      "encumbranceHint": "Il carico medio/pesante riduce la Des massima in CA, applica una penalità di prova e riduce la velocità, come indossare un'armatura media/pesante — questi effetti si sommano a quelli dell'armatura indossata.",
       "defenseLoadout": "Modificatori alla Difesa",
       "defenseLoadoutHint": "Questi si sommano ai bonus già calcolati dall'armatura/scudo equipaggiati qui sotto — usali per bonus di potenziamento o per tutto ciò che non è coperto dal catalogo.",
       "fromEquipment": "Dall'equipaggiamento indossato",
@@ -148,7 +163,9 @@
         "other": "Altro"
       },
       "notes": "Note",
-      "empty": "Nessun talento aggiunto."
+      "empty": "Nessun talento aggiunto.",
+      "selectedSkill": "Abilità scelta",
+      "selectedWeapon": "Arma scelta"
     },
     "inventory": {
       "heading": "Equipaggiamento",
@@ -169,7 +186,21 @@
         "slashing": "Taglio",
         "bludgeoning": "Contundente"
       },
-      "customQualities": "Caratteristiche / capacità speciali"
+      "customQualities": "Caratteristiche / capacità speciali",
+      "customKind": "Tipo",
+      "customKindNone": "Nessuno",
+      "customKindWeapon": "Arma",
+      "customKindArmor": "Armatura / Scudo",
+      "customCritRange": "Soglia di critico",
+      "customCritMultiplier": "Moltiplicatore critico",
+      "customDamageTypes": "Tipi di danno (testo libero)",
+      "customArmorCategory": "Categoria",
+      "armorCategories": {
+        "light": "Leggera",
+        "medium": "Media",
+        "heavy": "Pesante",
+        "shield": "Scudo"
+      }
     },
     "spells": {
       "heading": "Incantesimi",
@@ -179,8 +210,11 @@
       "customDescription": "Descrizione",
       "customSchool": "Scuola",
       "customLevel": "Livello",
+      "customCastingClass": "Classe di lancio",
       "prepared": "Preparato",
-      "empty": "Nessun incantesimo conosciuto."
+      "empty": "Nessun incantesimo conosciuto.",
+      "slotsPerDay": "Incantesimi al giorno",
+      "dc": "CD {{dc}}"
     },
     "companions": {
       "heading": "Companion",

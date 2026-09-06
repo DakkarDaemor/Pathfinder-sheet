@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
+import { WEAPONS } from "@/content/equipment";
 import { FEATS, FEATS_BY_ID } from "@/content/feats";
+import { SKILLS } from "@/content/skills";
 import { FEAT_TYPES, type FeatType } from "@/content/types";
 import type { FeatSlot, PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
@@ -15,6 +17,8 @@ interface FeatsTabProps {
 export function FeatsTab({ character, onChange }: FeatsTabProps) {
   const { t } = useTranslation();
   const sortedFeats = sortByLabel(FEATS, (feat) => t(feat.nameKey));
+  const sortedSkills = sortByLabel(SKILLS, (skill) => t(skill.nameKey));
+  const sortedWeapons = sortByLabel(WEAPONS, (weapon) => t(weapon.nameKey));
 
   function addFeat() {
     const firstFeat = FEATS[0];
@@ -23,7 +27,16 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
       ...c,
       feats: [
         ...c.feats,
-        { id: generateId(), featId: firstFeat.id, customName: "", customDescription: "", customType: "general", notes: "" },
+        {
+          id: generateId(),
+          featId: firstFeat.id,
+          customName: "",
+          customDescription: "",
+          customType: "general",
+          selectedSkillId: null,
+          selectedWeaponId: null,
+          notes: "",
+        },
       ],
     }));
   }
@@ -33,7 +46,16 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
       ...c,
       feats: [
         ...c.feats,
-        { id: generateId(), featId: null, customName: "", customDescription: "", customType: "general", notes: "" },
+        {
+          id: generateId(),
+          featId: null,
+          customName: "",
+          customDescription: "",
+          customType: "general",
+          selectedSkillId: null,
+          selectedWeaponId: null,
+          notes: "",
+        },
       ],
     }));
   }
@@ -89,6 +111,36 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                     {t(def.descriptionKey)}
                     {def.prerequisiteKey ? ` — ${t(def.prerequisiteKey)}` : ""}
                   </p>
+                ) : null}
+                {def?.effect?.kind === "skillFocus" ? (
+                  <Select
+                    aria-label={t("characterSheet.feats.selectedSkill")}
+                    value={featSlot.selectedSkillId ?? ""}
+                    onChange={(e) => updateFeat(featSlot.id, { selectedSkillId: e.target.value || null })}
+                    className="mb-2 !w-auto"
+                  >
+                    <option value="">{t("characterSheet.feats.selectedSkill")}</option>
+                    {sortedSkills.map((skill) => (
+                      <option key={skill.id} value={skill.id}>
+                        {t(skill.nameKey)}
+                      </option>
+                    ))}
+                  </Select>
+                ) : null}
+                {def?.effect?.kind === "weaponAttackBonus" ? (
+                  <Select
+                    aria-label={t("characterSheet.feats.selectedWeapon")}
+                    value={featSlot.selectedWeaponId ?? ""}
+                    onChange={(e) => updateFeat(featSlot.id, { selectedWeaponId: e.target.value || null })}
+                    className="mb-2 !w-auto"
+                  >
+                    <option value="">{t("characterSheet.feats.selectedWeapon")}</option>
+                    {sortedWeapons.map((weapon) => (
+                      <option key={weapon.id} value={weapon.id}>
+                        {t(weapon.nameKey)}
+                      </option>
+                    ))}
+                  </Select>
                 ) : null}
                 {!featSlot.featId ? (
                   <>

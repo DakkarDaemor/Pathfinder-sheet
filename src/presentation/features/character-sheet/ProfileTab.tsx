@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { RACES } from "@/content/races";
+import { RACES, RACES_BY_ID } from "@/content/races";
 import { CLASSES } from "@/content/classes";
+import { ABILITY_NAMES, type AbilityName } from "@/domain/shared/abilities";
 import { SIZE_CATEGORIES } from "@/domain/shared/size";
 import { totalCharacterLevel, type PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
@@ -18,6 +19,7 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
   const { t } = useTranslation();
   const sortedRaces = sortByLabel(RACES, (race) => t(race.nameKey));
   const sortedClasses = sortByLabel(CLASSES, (klass) => t(klass.nameKey));
+  const race = RACES_BY_ID[character.raceId];
 
   function addClassLevel() {
     const firstUnused = CLASSES.find((c) => !character.classLevels.some((cl) => cl.classId === c.id));
@@ -50,13 +52,30 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
 
       <Field label={t("characterSheet.profile.race")}>
         <Select value={character.raceId} onChange={(e) => onChange((c) => ({ ...c, raceId: e.target.value }))}>
-          {sortedRaces.map((race) => (
-            <option key={race.id} value={race.id}>
-              {t(race.nameKey)}
+          {sortedRaces.map((r) => (
+            <option key={r.id} value={r.id}>
+              {t(r.nameKey)}
             </option>
           ))}
         </Select>
       </Field>
+      {race?.floatingAbilityBonus ? (
+        <Field label={t("characterSheet.profile.floatingAbilityChoice", { bonus: race.floatingAbilityBonus })}>
+          <Select
+            value={character.floatingAbilityChoice ?? ""}
+            onChange={(e) =>
+              onChange((c) => ({ ...c, floatingAbilityChoice: (e.target.value || null) as AbilityName | null }))
+            }
+          >
+            <option value="" />
+            {ABILITY_NAMES.map((ability) => (
+              <option key={ability} value={ability}>
+                {t(`characterSheet.abilities.${ability}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      ) : null}
       <Field label={t("characterSheet.profile.size")}>
         <Select value={character.size} onChange={(e) => onChange((c) => ({ ...c, size: e.target.value as PlayerCharacter["size"] }))}>
           {SIZE_CATEGORIES.map((size) => (
