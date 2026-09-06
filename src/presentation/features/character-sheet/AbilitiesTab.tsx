@@ -1,15 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { ABILITY_NAMES, abilityModifier } from "@/domain/shared/abilities";
+import { ABILITY_NAMES, abilityModifier, formatModifier } from "@/domain/shared/abilities";
 import type { PlayerCharacter } from "@/domain/character/types";
 import { Field, NumberInput } from "@/presentation/components/fields";
 
 interface AbilitiesTabProps {
   character: PlayerCharacter;
   onChange: (updater: (character: PlayerCharacter) => PlayerCharacter) => void;
-}
-
-function formatModifier(mod: number): string {
-  return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
 export function AbilitiesTab({ character, onChange }: AbilitiesTabProps) {

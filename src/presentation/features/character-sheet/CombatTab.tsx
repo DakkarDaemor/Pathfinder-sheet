@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { CLASSES_BY_ID } from "@/content/classes";
-import { deriveCombatSheet } from "@/domain/character/calculations";
+import { deriveAttacks, deriveCombatSheet } from "@/domain/character/calculations";
 import type { PlayerCharacter } from "@/domain/character/types";
+import { formatModifier } from "@/domain/shared/abilities";
 import { Field, NumberInput } from "@/presentation/components/fields";
 
 interface CombatTabProps {
@@ -21,6 +22,7 @@ function StatBox({ label, value }: { label: string; value: number | string }) {
 export function CombatTab({ character, onChange }: CombatTabProps) {
   const { t } = useTranslation();
   const sheet = deriveCombatSheet(character, CLASSES_BY_ID);
+  const attacks = deriveAttacks(character, CLASSES_BY_ID);
 
   function updateDefense(patch: Partial<PlayerCharacter["defense"]>) {
     onChange((c) => ({ ...c, defense: { ...c.defense, ...patch } }));
@@ -63,6 +65,39 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
       </section>
 
       <section>
+        <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.attacks")}</h3>
+        {attacks.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t("characterSheet.combat.attacksEmpty")}</p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {attacks.map((attack) => {
+              const damageTypes = attack.damageTypes
+                .map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`))
+                .join(", ");
+              return (
+                <div
+                  key={attack.inventoryItemId}
+                  className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-lg border border-border bg-card p-3 text-sm"
+                >
+                  <span className="font-semibold">{attack.name}</span>
+                  <span>
+                    {t("characterSheet.combat.attackBonus")}: {formatModifier(attack.attackBonus)}
+                  </span>
+                  <span>
+                    {t("characterSheet.inventory.damage")}: {attack.damageDice}
+                    {attack.damageBonus !== 0 ? formatModifier(attack.damageBonus) : ""}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {t("characterSheet.inventory.critical")} {attack.critRange}/×{attack.critMultiplier} — {damageTypes}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      <section>
         <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.hitPoints")}</h3>
         <div className="grid grid-cols-3 gap-3">
           <Field label={t("characterSheet.combat.hpMax")}>
@@ -84,7 +119,17 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
       </section>
 
       <section>
-        <h3 className="mb-2 text-sm font-semibold">{t("characterSheet.combat.defenseLoadout")}</h3>
+        <h3 className="mb-1 text-sm font-semibold">{t("characterSheet.combat.defenseLoadout")}</h3>
+        <p className="mb-2 text-xs text-muted-foreground">{t("characterSheet.combat.defenseLoadoutHint")}</p>
+        <p className="mb-3 text-sm">
+          {t("characterSheet.combat.fromEquipment")}: {t("characterSheet.combat.armorBonus")}{" "}
+          {formatModifier(sheet.equipmentDefenseBonuses.armorBonus)}, {t("characterSheet.combat.shieldBonus")}{" "}
+          {formatModifier(sheet.equipmentDefenseBonuses.shieldBonus)}, {t("characterSheet.combat.armorCheckPenalty")}{" "}
+          {formatModifier(-sheet.equipmentDefenseBonuses.armorCheckPenalty)}, {t("characterSheet.combat.armorMaxDexBonus")}{" "}
+          {sheet.equipmentDefenseBonuses.armorMaxDexBonus === null
+            ? "—"
+            : formatModifier(sheet.equipmentDefenseBonuses.armorMaxDexBonus)}
+        </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Field label={t("characterSheet.combat.armorBonus")}>
             <NumberInput

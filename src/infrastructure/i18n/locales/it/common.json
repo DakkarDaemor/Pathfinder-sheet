@@ -102,6 +102,9 @@
       "combatManeuvers": "Manovre di Combattimento",
       "cmb": "CMB",
       "cmd": "CMD",
+      "attacks": "Attacchi",
+      "attacksEmpty": "Nessuna arma equipaggiata. Segna un'arma come \"Indossato\" in Equipaggiamento per vederla qui.",
+      "attackBonus": "Bonus di attacco",
       "hitPoints": "Punti Ferita",
       "hpMax": "PF Massimi",
       "hpCurrent": "PF Attuali",
@@ -111,6 +114,8 @@
       "medium": "Medio",
       "heavy": "Pesante",
       "defenseLoadout": "Modificatori alla Difesa",
+      "defenseLoadoutHint": "Questi si sommano ai bonus già calcolati dall'armatura/scudo equipaggiati qui sotto — usali per bonus di potenziamento o per tutto ciò che non è coperto dal catalogo.",
+      "fromEquipment": "Dall'equipaggiamento indossato",
       "armorBonus": "Bonus Armatura",
       "shieldBonus": "Bonus Scudo",
       "armorMaxDexBonus": "Dex Massima (Armatura)",
@@ -163,7 +168,8 @@
         "piercing": "Perforazione",
         "slashing": "Taglio",
         "bludgeoning": "Contundente"
-      }
+      },
+      "customQualities": "Caratteristiche / capacità speciali"
     },
     "spells": {
       "heading": "Incantesimi",

@@ -3,14 +3,16 @@ import { createDefaultAbilityScores } from "@/domain/shared/abilities";
 import { createDefaultDefenseLoadout } from "@/domain/shared/creature";
 import type { ClassDefinition, SkillDefinition } from "@/content/types";
 import {
+  deriveAttacks,
   deriveSkillTotals,
   resolveBaseAttackBonus,
   resolveBaseSaves,
+  resolveEquipmentDefenseBonuses,
   skillPointsForLevel,
   type ClassLookup,
   type SkillLookup,
 } from "./calculations";
-import type { PlayerCharacter } from "./types";
+import type { InventoryItem, PlayerCharacter } from "./types";
 
 const fighter: ClassDefinition = {
   id: "fighter",
@@ -129,5 +131,79 @@ describe("skillPointsForLevel", () => {
 
   it("adds the Int modifier to the class base", () => {
     expect(skillPointsForLevel(wizard, 3)).toBe(5);
+  });
+});
+
+function inventoryItem(overrides: Partial<InventoryItem>): InventoryItem {
+  return {
+    id: "item-1",
+    equipmentId: null,
+    name: "",
+    quantity: 1,
+    weight: 0,
+    equipped: false,
+    customQualities: "",
+    notes: "",
+    ...overrides,
+  };
+}
+
+describe("resolveEquipmentDefenseBonuses", () => {
+  it("ignores items that aren't equipped or aren't catalog armor", () => {
+    const bonuses = resolveEquipmentDefenseBonuses([
+      inventoryItem({ id: "a", equipmentId: "studdedLeather", equipped: false }),
+      inventoryItem({ id: "b", equipmentId: null, equipped: true }),
+    ]);
+    expect(bonuses).toEqual({ armorBonus: 0, shieldBonus: 0, armorCheckPenalty: 0, armorMaxDexBonus: null });
+  });
+
+  it("combines an equipped armor and shield, flipping check penalty to a positive magnitude", () => {
+    // studdedLeather: light, acBonus 3, maxDexBonus 5, checkPenalty -1
+    // heavyWoodenShield: shield, acBonus 2, checkPenalty -2
+    const bonuses = resolveEquipmentDefenseBonuses([
+      inventoryItem({ id: "a", equipmentId: "studdedLeather", equipped: true }),
+      inventoryItem({ id: "b", equipmentId: "heavyWoodenShield", equipped: true }),
+    ]);
+    expect(bonuses.armorBonus).toBe(3);
+    expect(bonuses.shieldBonus).toBe(2);
+    expect(bonuses.armorMaxDexBonus).toBe(5);
+    expect(bonuses.armorCheckPenalty).toBe(3); // 1 + 2, stacked and positive
+  });
+
+  it("takes the best armor bonus rather than stacking two body armors", () => {
+    // studdedLeather acBonus 3, chainmail acBonus 6 (medium)
+    const bonuses = resolveEquipmentDefenseBonuses([
+      inventoryItem({ id: "a", equipmentId: "studdedLeather", equipped: true }),
+      inventoryItem({ id: "b", equipmentId: "chainmail", equipped: true }),
+    ]);
+    expect(bonuses.armorBonus).toBe(6);
+    expect(bonuses.armorMaxDexBonus).toBe(2); // chainmail's own max Dex, since it won
+  });
+});
+
+describe("deriveAttacks", () => {
+  it("derives attack bonus and damage from an equipped catalog weapon", () => {
+    const character = baseCharacter({
+      classLevels: [{ classId: "fighter", level: 3 }],
+      abilityScores: { ...createDefaultAbilityScores(10), str: 16 },
+      inventory: [inventoryItem({ id: "sword", equipmentId: "longsword", name: "Longsword", equipped: true })],
+    });
+
+    const [attack] = deriveAttacks(character, classesById);
+    // BAB(fighter 3, full) 3 + strMod(16 -> +3) + sizeMod(medium 0) = 6
+    expect(attack?.attackBonus).toBe(6);
+    expect(attack?.damageDice).toBe("1d8");
+    expect(attack?.damageBonus).toBe(3);
+    expect(attack?.critRange).toBe("19-20");
+  });
+
+  it("skips equipped non-weapon and custom items", () => {
+    const character = baseCharacter({
+      inventory: [
+        inventoryItem({ id: "armor", equipmentId: "studdedLeather", equipped: true }),
+        inventoryItem({ id: "custom", equipmentId: null, name: "Homebrew blade", equipped: true }),
+      ],
+    });
+    expect(deriveAttacks(character, classesById)).toEqual([]);
   });
 });

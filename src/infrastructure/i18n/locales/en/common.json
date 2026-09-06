@@ -102,6 +102,9 @@
       "combatManeuvers": "Combat Maneuvers",
       "cmb": "CMB",
       "cmd": "CMD",
+      "attacks": "Attacks",
+      "attacksEmpty": "No weapon equipped. Mark a weapon as \"Equipped\" in Inventory to see it here.",
+      "attackBonus": "Attack bonus",
       "hitPoints": "Hit Points",
       "hpMax": "Max HP",
       "hpCurrent": "Current HP",
@@ -111,6 +114,8 @@
       "medium": "Medium",
       "heavy": "Heavy",
       "defenseLoadout": "Defense Modifiers",
+      "defenseLoadoutHint": "These stack on top of the bonuses already computed from your equipped armor/shield below — use them for enhancement bonuses or anything not covered by the catalog.",
+      "fromEquipment": "From equipped gear",
       "armorBonus": "Armor Bonus",
       "shieldBonus": "Shield Bonus",
       "armorMaxDexBonus": "Max Dex (Armor)",
@@ -163,7 +168,8 @@
         "piercing": "Piercing",
         "slashing": "Slashing",
         "bludgeoning": "Bludgeoning"
-      }
+      },
+      "customQualities": "Qualities / special abilities"
     },
     "spells": {
       "heading": "Spells",

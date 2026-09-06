@@ -31,6 +31,7 @@ export interface InventoryItem {
   quantity: number;
   weight: number;
   equipped: boolean;
+  customQualities: string; // only meaningful when equipmentId is null: damage/AC/special abilities
   notes: string;
 }
 

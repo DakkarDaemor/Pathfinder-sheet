@@ -82,6 +82,7 @@ const characterSchema = z.object({
       quantity: z.number(),
       weight: z.number(),
       equipped: z.boolean(),
+      customQualities: z.string(),
       notes: z.string(),
     }),
   ),

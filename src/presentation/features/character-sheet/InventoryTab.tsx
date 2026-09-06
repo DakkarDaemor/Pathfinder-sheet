@@ -54,6 +54,7 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
           quantity: 1,
           weight: entry.weight,
           equipped: false,
+          customQualities: "",
           notes: "",
         },
       ],
@@ -65,7 +66,16 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
       ...c,
       inventory: [
         ...c.inventory,
-        { id: generateId(), equipmentId: null, name: "", quantity: 1, weight: 0, equipped: false, notes: "" },
+        {
+          id: generateId(),
+          equipmentId: null,
+          name: "",
+          quantity: 1,
+          weight: 0,
+          equipped: false,
+          customQualities: "",
+          notes: "",
+        },
       ],
     }));
   }
@@ -101,9 +111,10 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
             <tbody>
               {character.inventory.map((item) => {
                 const details = describeItem(item.equipmentId);
+                const showCustomQualities = !item.equipmentId;
                 return (
                   <Fragment key={item.id}>
-                    <tr className={details ? "border-none" : "border-b border-border/60"}>
+                    <tr className={details || showCustomQualities ? "border-none" : "border-b border-border/60"}>
                       <td className="py-1.5 pr-2">
                         <TextInput value={item.name} onChange={(e) => updateItem(item.id, { name: e.target.value })} />
                       </td>
@@ -139,6 +150,18 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                       <tr className="border-b border-border/60">
                         <td colSpan={5} className="px-0 pb-1.5 pr-2 text-xs text-muted-foreground">
                           {details}
+                        </td>
+                      </tr>
+                    ) : null}
+                    {showCustomQualities ? (
+                      <tr className="border-b border-border/60">
+                        <td colSpan={5} className="px-0 pb-1.5 pr-2">
+                          <TextInput
+                            aria-label={t("characterSheet.inventory.customQualities")}
+                            placeholder={t("characterSheet.inventory.customQualities")}
+                            value={item.customQualities}
+                            onChange={(e) => updateItem(item.id, { customQualities: e.target.value })}
+                          />
                         </td>
                       </tr>
                     ) : null}
