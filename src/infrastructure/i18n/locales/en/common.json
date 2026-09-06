@@ -133,7 +133,8 @@
         "overloaded": "Overloaded"
       },
       "speed": "Speed",
-      "feet": "ft.",
+      "meters": "m",
+      "kg": "kg",
       "encumbranceHint": "A medium/heavy load caps your max Dex to AC, applies a check penalty, and reduces speed — the same as wearing medium/heavy armor — stacking with any penalty from armor you're actually wearing.",
       "defenseLoadout": "Defense Modifiers",
       "defenseLoadoutHint": "These stack on top of the bonuses already computed from your equipped armor/shield below — use them for enhancement bonuses or anything not covered by the catalog.",

@@ -10,6 +10,7 @@ import {
 import type { PlayerCharacter } from "@/domain/character/types";
 import { formatModifier } from "@/domain/shared/abilities";
 import { Checkbox, Field, NumberInput } from "@/presentation/components/fields";
+import { feetToMeters, poundsToKg, roundMetric } from "@/shared/units";
 
 interface CombatTabProps {
   character: PlayerCharacter;
@@ -89,8 +90,14 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <StatBox label={t("characterSheet.combat.cmb")} value={`+${sheet.combatManeuvers.cmb}`} />
           <StatBox label={t("characterSheet.combat.cmd")} value={sheet.combatManeuvers.cmd} />
-          <StatBox label={t("characterSheet.combat.light")} value={sheet.carryingCapacity.light} />
-          <StatBox label={t("characterSheet.combat.heavy")} value={sheet.carryingCapacity.heavy} />
+          <StatBox
+            label={t("characterSheet.combat.light")}
+            value={`${roundMetric(poundsToKg(sheet.carryingCapacity.light))} ${t("characterSheet.combat.kg")}`}
+          />
+          <StatBox
+            label={t("characterSheet.combat.heavy")}
+            value={`${roundMetric(poundsToKg(sheet.carryingCapacity.heavy))} ${t("characterSheet.combat.kg")}`}
+          />
         </div>
       </section>
 
@@ -99,7 +106,7 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <StatBox
             label={t("characterSheet.combat.carriedWeight")}
-            value={sheet.encumbrance.totalWeight}
+            value={`${roundMetric(poundsToKg(sheet.encumbrance.totalWeight))} ${t("characterSheet.combat.kg")}`}
           />
           <StatBox
             label={t("characterSheet.combat.encumbranceLevel")}
@@ -110,7 +117,7 @@ export function CombatTab({ character, onChange }: CombatTabProps) {
             value={
               sheet.encumbrance.speed === null
                 ? "—"
-                : `${sheet.encumbrance.speed} ${t("characterSheet.combat.feet")}`
+                : `${roundMetric(feetToMeters(sheet.encumbrance.speed))} ${t("characterSheet.combat.meters")}`
             }
           />
         </div>

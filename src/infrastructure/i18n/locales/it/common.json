@@ -133,7 +133,8 @@
         "overloaded": "Sovraccarico"
       },
       "speed": "Velocità",
-      "feet": "piedi",
+      "meters": "m",
+      "kg": "kg",
       "encumbranceHint": "Il carico medio/pesante riduce la Des massima in CA, applica una penalità di prova e riduce la velocità, come indossare un'armatura media/pesante — questi effetti si sommano a quelli dell'armatura indossata.",
       "defenseLoadout": "Modificatori alla Difesa",
       "defenseLoadoutHint": "Questi si sommano ai bonus già calcolati dall'armatura/scudo equipaggiati qui sotto — usali per bonus di potenziamento o per tutto ciò che non è coperto dal catalogo.",

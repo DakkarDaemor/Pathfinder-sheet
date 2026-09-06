@@ -1,12 +1,23 @@
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { ARMORS, ARMORS_BY_ID, GEAR, WEAPONS, WEAPONS_BY_ID } from "@/content/equipment";
-import type { ArmorCategory, ArmorDefinition, GearDefinition, WeaponDefinition } from "@/content/types";
-import type { CustomArmorStats, CustomWeaponStats, InventoryItem, PlayerCharacter } from "@/domain/character/types";
+import type {
+  ArmorCategory,
+  ArmorDefinition,
+  GearDefinition,
+  WeaponDefinition,
+} from "@/content/types";
+import type {
+  CustomArmorStats,
+  CustomWeaponStats,
+  InventoryItem,
+  PlayerCharacter,
+} from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
 import { Checkbox, NumberInput, Select, TextInput } from "@/presentation/components/fields";
 import { generateId } from "@/shared/id";
 import { sortByLabel } from "@/shared/sortByLabel";
+import { kgToPounds, poundsToKg, roundMetric } from "@/shared/units";
 
 interface InventoryTabProps {
   character: PlayerCharacter;
@@ -25,8 +36,18 @@ function customKindOf(item: InventoryItem): CustomKind {
   return "none";
 }
 
-const DEFAULT_CUSTOM_WEAPON: CustomWeaponStats = { damage: "1d6", critRange: "20", critMultiplier: 2, damageTypes: "" };
-const DEFAULT_CUSTOM_ARMOR: CustomArmorStats = { category: "light", acBonus: 0, maxDexBonus: null, checkPenalty: 0 };
+const DEFAULT_CUSTOM_WEAPON: CustomWeaponStats = {
+  damage: "1d6",
+  critRange: "20",
+  critMultiplier: 2,
+  damageTypes: "",
+};
+const DEFAULT_CUSTOM_ARMOR: CustomArmorStats = {
+  category: "light",
+  acBonus: 0,
+  maxDexBonus: null,
+  checkPenalty: 0,
+};
 
 export function InventoryTab({ character, onChange }: InventoryTabProps) {
   const { t } = useTranslation();
@@ -42,7 +63,9 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
     if (!equipmentId) return null;
     const weaponDef = WEAPONS_BY_ID[equipmentId];
     if (weaponDef) {
-      const types = weaponDef.damageTypes.map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`)).join(", ");
+      const types = weaponDef.damageTypes
+        .map((dt) => t(`characterSheet.inventory.damageTypes.${dt}`))
+        .join(", ");
       return `${t("characterSheet.inventory.damage")}: ${weaponDef.damage} (${t("characterSheet.inventory.critical")} ${weaponDef.critRange}/×${weaponDef.critMultiplier}) — ${types}`;
     }
     const armorDef = ARMORS_BY_ID[equipmentId];
@@ -98,14 +121,20 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
   }
 
   function updateItem(id: string, patch: Partial<PlayerCharacter["inventory"][number]>) {
-    onChange((c) => ({ ...c, inventory: c.inventory.map((item) => (item.id === id ? { ...item, ...patch } : item)) }));
+    onChange((c) => ({
+      ...c,
+      inventory: c.inventory.map((item) => (item.id === id ? { ...item, ...patch } : item)),
+    }));
   }
 
   function removeItem(id: string) {
     onChange((c) => ({ ...c, inventory: c.inventory.filter((item) => item.id !== id) }));
   }
 
-  const totalWeight = character.inventory.reduce((sum, item) => sum + item.weight * item.quantity, 0);
+  const totalWeight = character.inventory.reduce(
+    (sum, item) => sum + item.weight * item.quantity,
+    0,
+  );
 
   return (
     <div>
@@ -120,7 +149,9 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
               <tr className="border-b border-border text-left text-xs text-muted-foreground">
                 <th className="py-2 pr-2">{t("characterSheet.inventory.itemName")}</th>
                 <th className="px-2 py-2 text-center">{t("characterSheet.inventory.quantity")}</th>
-                <th className="px-2 py-2 text-center">{t("characterSheet.inventory.weight")}</th>
+                <th className="px-2 py-2 text-center">
+                  {t("characterSheet.inventory.weight")} ({t("characterSheet.combat.kg")})
+                </th>
                 <th className="px-2 py-2 text-center">{t("characterSheet.inventory.equipped")}</th>
                 <th className="px-2 py-2" />
               </tr>
@@ -131,23 +162,34 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                 const showCustomQualities = !item.equipmentId;
                 return (
                   <Fragment key={item.id}>
-                    <tr className={details || showCustomQualities ? "border-none" : "border-b border-border/60"}>
+                    <tr
+                      className={
+                        details || showCustomQualities ? "border-none" : "border-b border-border/60"
+                      }
+                    >
                       <td className="py-1.5 pr-2">
-                        <TextInput value={item.name} onChange={(e) => updateItem(item.id, { name: e.target.value })} />
+                        <TextInput
+                          value={item.name}
+                          onChange={(e) => updateItem(item.id, { name: e.target.value })}
+                        />
                       </td>
                       <td className="px-2 py-1.5">
                         <NumberInput
                           min={0}
                           value={item.quantity}
-                          onChange={(e) => updateItem(item.id, { quantity: Number(e.target.value) })}
+                          onChange={(e) =>
+                            updateItem(item.id, { quantity: Number(e.target.value) })
+                          }
                           className="!w-16 text-center"
                         />
                       </td>
                       <td className="px-2 py-1.5">
                         <NumberInput
                           min={0}
-                          value={item.weight}
-                          onChange={(e) => updateItem(item.id, { weight: Number(e.target.value) })}
+                          value={roundMetric(poundsToKg(item.weight))}
+                          onChange={(e) =>
+                            updateItem(item.id, { weight: kgToPounds(Number(e.target.value)) })
+                          }
                           className="!w-20 text-center"
                         />
                       </td>
@@ -178,7 +220,9 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                               aria-label={t("characterSheet.inventory.customQualities")}
                               placeholder={t("characterSheet.inventory.customQualities")}
                               value={item.customQualities}
-                              onChange={(e) => updateItem(item.id, { customQualities: e.target.value })}
+                              onChange={(e) =>
+                                updateItem(item.id, { customQualities: e.target.value })
+                              }
                             />
                             <label className="flex items-center gap-2 text-xs text-muted-foreground">
                               {t("characterSheet.inventory.customKind")}
@@ -194,9 +238,15 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                                 }}
                                 className="!w-auto"
                               >
-                                <option value="none">{t("characterSheet.inventory.customKindNone")}</option>
-                                <option value="weapon">{t("characterSheet.inventory.customKindWeapon")}</option>
-                                <option value="armor">{t("characterSheet.inventory.customKindArmor")}</option>
+                                <option value="none">
+                                  {t("characterSheet.inventory.customKindNone")}
+                                </option>
+                                <option value="weapon">
+                                  {t("characterSheet.inventory.customKindWeapon")}
+                                </option>
+                                <option value="armor">
+                                  {t("characterSheet.inventory.customKindArmor")}
+                                </option>
                               </Select>
                             </label>
                             {item.customWeapon ? (
@@ -205,27 +255,53 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                                   aria-label={t("characterSheet.inventory.damage")}
                                   placeholder={t("characterSheet.inventory.damage")}
                                   value={item.customWeapon.damage}
-                                  onChange={(e) => updateItem(item.id, { customWeapon: { ...item.customWeapon!, damage: e.target.value } })}
+                                  onChange={(e) =>
+                                    updateItem(item.id, {
+                                      customWeapon: {
+                                        ...item.customWeapon!,
+                                        damage: e.target.value,
+                                      },
+                                    })
+                                  }
                                 />
                                 <TextInput
                                   aria-label={t("characterSheet.inventory.critical")}
                                   placeholder={t("characterSheet.inventory.customCritRange")}
                                   value={item.customWeapon.critRange}
-                                  onChange={(e) => updateItem(item.id, { customWeapon: { ...item.customWeapon!, critRange: e.target.value } })}
+                                  onChange={(e) =>
+                                    updateItem(item.id, {
+                                      customWeapon: {
+                                        ...item.customWeapon!,
+                                        critRange: e.target.value,
+                                      },
+                                    })
+                                  }
                                 />
                                 <NumberInput
                                   aria-label={t("characterSheet.inventory.customCritMultiplier")}
                                   min={1}
                                   value={item.customWeapon.critMultiplier}
                                   onChange={(e) =>
-                                    updateItem(item.id, { customWeapon: { ...item.customWeapon!, critMultiplier: Number(e.target.value) } })
+                                    updateItem(item.id, {
+                                      customWeapon: {
+                                        ...item.customWeapon!,
+                                        critMultiplier: Number(e.target.value),
+                                      },
+                                    })
                                   }
                                 />
                                 <TextInput
                                   aria-label={t("characterSheet.inventory.customDamageTypes")}
                                   placeholder={t("characterSheet.inventory.customDamageTypes")}
                                   value={item.customWeapon.damageTypes}
-                                  onChange={(e) => updateItem(item.id, { customWeapon: { ...item.customWeapon!, damageTypes: e.target.value } })}
+                                  onChange={(e) =>
+                                    updateItem(item.id, {
+                                      customWeapon: {
+                                        ...item.customWeapon!,
+                                        damageTypes: e.target.value,
+                                      },
+                                    })
+                                  }
                                 />
                               </div>
                             ) : null}
@@ -235,7 +311,12 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                                   aria-label={t("characterSheet.inventory.customArmorCategory")}
                                   value={item.customArmor.category}
                                   onChange={(e) =>
-                                    updateItem(item.id, { customArmor: { ...item.customArmor!, category: e.target.value as ArmorCategory } })
+                                    updateItem(item.id, {
+                                      customArmor: {
+                                        ...item.customArmor!,
+                                        category: e.target.value as ArmorCategory,
+                                      },
+                                    })
                                   }
                                 >
                                   {ARMOR_CATEGORIES.map((cat) => (
@@ -247,7 +328,14 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                                 <NumberInput
                                   aria-label={t("characterSheet.inventory.armorClassBonus")}
                                   value={item.customArmor.acBonus}
-                                  onChange={(e) => updateItem(item.id, { customArmor: { ...item.customArmor!, acBonus: Number(e.target.value) } })}
+                                  onChange={(e) =>
+                                    updateItem(item.id, {
+                                      customArmor: {
+                                        ...item.customArmor!,
+                                        acBonus: Number(e.target.value),
+                                      },
+                                    })
+                                  }
                                 />
                                 <NumberInput
                                   aria-label={t("characterSheet.inventory.maxDex")}
@@ -255,7 +343,11 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                                   value={item.customArmor.maxDexBonus ?? ""}
                                   onChange={(e) =>
                                     updateItem(item.id, {
-                                      customArmor: { ...item.customArmor!, maxDexBonus: e.target.value === "" ? null : Number(e.target.value) },
+                                      customArmor: {
+                                        ...item.customArmor!,
+                                        maxDexBonus:
+                                          e.target.value === "" ? null : Number(e.target.value),
+                                      },
                                     })
                                   }
                                 />
@@ -263,7 +355,12 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
                                   aria-label={t("characterSheet.inventory.checkPenalty")}
                                   value={item.customArmor.checkPenalty}
                                   onChange={(e) =>
-                                    updateItem(item.id, { customArmor: { ...item.customArmor!, checkPenalty: Number(e.target.value) } })
+                                    updateItem(item.id, {
+                                      customArmor: {
+                                        ...item.customArmor!,
+                                        checkPenalty: Number(e.target.value),
+                                      },
+                                    })
                                   }
                                 />
                               </div>
@@ -281,7 +378,8 @@ export function InventoryTab({ character, onChange }: InventoryTabProps) {
       )}
 
       <div className="mb-3 text-sm font-medium">
-        {t("characterSheet.inventory.totalWeight")}: {totalWeight}
+        {t("characterSheet.inventory.totalWeight")}: {roundMetric(poundsToKg(totalWeight))}{" "}
+        {t("characterSheet.combat.kg")}
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
