@@ -4,6 +4,7 @@ import type { KnownSpell, PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
 import { Checkbox, NumberInput, Select, TextInput } from "@/presentation/components/fields";
 import { generateId } from "@/shared/id";
+import { sortByLabel } from "@/shared/sortByLabel";
 
 interface SpellsTabProps {
   character: PlayerCharacter;
@@ -14,6 +15,7 @@ export function SpellsTab({ character, onChange }: SpellsTabProps) {
   const { t } = useTranslation();
   const characterClassIds = character.classLevels.map((cl) => cl.classId);
   const availableSpells = SPELLS.filter((spell) => characterClassIds.some((classId) => classId in spell.levelsByClass));
+  const sortedSpells = sortByLabel(SPELLS, (spell) => t(spell.nameKey));
 
   function addSpell() {
     const firstSpell = availableSpells[0] ?? SPELLS[0];
@@ -64,7 +66,7 @@ export function SpellsTab({ character, onChange }: SpellsTabProps) {
                       onChange={(e) => updateSpell(known.id, { spellId: e.target.value })}
                       className="flex-1"
                     >
-                      {SPELLS.map((spell) => (
+                      {sortedSpells.map((spell) => (
                         <option key={spell.id} value={spell.id}>
                           {t(spell.nameKey)}
                         </option>

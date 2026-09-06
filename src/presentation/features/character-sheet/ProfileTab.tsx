@@ -5,6 +5,7 @@ import { SIZE_CATEGORIES } from "@/domain/shared/size";
 import { totalCharacterLevel, type PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
 import { Field, NumberInput, Select, TextInput } from "@/presentation/components/fields";
+import { sortByLabel } from "@/shared/sortByLabel";
 
 const ALIGNMENTS = ["lg", "ng", "cg", "ln", "n", "cn", "le", "ne", "ce"];
 
@@ -15,6 +16,8 @@ interface ProfileTabProps {
 
 export function ProfileTab({ character, onChange }: ProfileTabProps) {
   const { t } = useTranslation();
+  const sortedRaces = sortByLabel(RACES, (race) => t(race.nameKey));
+  const sortedClasses = sortByLabel(CLASSES, (klass) => t(klass.nameKey));
 
   function addClassLevel() {
     const firstUnused = CLASSES.find((c) => !character.classLevels.some((cl) => cl.classId === c.id));
@@ -47,7 +50,7 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
 
       <Field label={t("characterSheet.profile.race")}>
         <Select value={character.raceId} onChange={(e) => onChange((c) => ({ ...c, raceId: e.target.value }))}>
-          {RACES.map((race) => (
+          {sortedRaces.map((race) => (
             <option key={race.id} value={race.id}>
               {t(race.nameKey)}
             </option>
@@ -94,7 +97,7 @@ export function ProfileTab({ character, onChange }: ProfileTabProps) {
                 onChange={(e) => updateClassLevel(index, { classId: e.target.value })}
                 className="flex-1"
               >
-                {CLASSES.map((klass) => (
+                {sortedClasses.map((klass) => (
                   <option key={klass.id} value={klass.id}>
                     {t(klass.nameKey)}
                   </option>

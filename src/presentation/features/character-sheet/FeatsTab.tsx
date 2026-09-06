@@ -5,6 +5,7 @@ import type { FeatSlot, PlayerCharacter } from "@/domain/character/types";
 import { Button } from "@/presentation/components/Button";
 import { Select, TextArea, TextInput } from "@/presentation/components/fields";
 import { generateId } from "@/shared/id";
+import { sortByLabel } from "@/shared/sortByLabel";
 
 interface FeatsTabProps {
   character: PlayerCharacter;
@@ -13,6 +14,7 @@ interface FeatsTabProps {
 
 export function FeatsTab({ character, onChange }: FeatsTabProps) {
   const { t } = useTranslation();
+  const sortedFeats = sortByLabel(FEATS, (feat) => t(feat.nameKey));
 
   function addFeat() {
     const firstFeat = FEATS[0];
@@ -63,7 +65,7 @@ export function FeatsTab({ character, onChange }: FeatsTabProps) {
                       onChange={(e) => updateFeat(featSlot.id, { featId: e.target.value })}
                       className="flex-1"
                     >
-                      {FEATS.map((feat) => (
+                      {sortedFeats.map((feat) => (
                         <option key={feat.id} value={feat.id}>
                           {t(feat.nameKey)}
                         </option>

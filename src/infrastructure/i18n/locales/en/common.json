@@ -152,7 +152,18 @@
       "weight": "Weight",
       "equipped": "Equipped",
       "totalWeight": "Total weight",
-      "empty": "No items in the inventory."
+      "empty": "No items in the inventory.",
+      "damage": "Damage",
+      "critical": "Crit",
+      "armorClassBonus": "AC bonus",
+      "maxDex": "Max Dex",
+      "checkPenalty": "Check penalty",
+      "spellFailure": "Spell failure",
+      "damageTypes": {
+        "piercing": "Piercing",
+        "slashing": "Slashing",
+        "bludgeoning": "Bludgeoning"
+      }
     },
     "spells": {
       "heading": "Spells",

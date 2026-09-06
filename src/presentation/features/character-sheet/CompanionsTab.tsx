@@ -13,6 +13,7 @@ import { createNewCompanion } from "@/application/useCases/createCompanion";
 import { Button } from "@/presentation/components/Button";
 import { useConfirm } from "@/presentation/components/ConfirmProvider";
 import { Field, NumberInput, Select, TextArea, TextInput } from "@/presentation/components/fields";
+import { sortByLabel } from "@/shared/sortByLabel";
 
 const CUSTOM_BASE_OPTION = "__custom__";
 
@@ -50,7 +51,7 @@ function CompanionCard({
   const { t } = useTranslation();
   const base = companion.baseId ? COMPANION_BASES_BY_ID[companion.baseId] : null;
   const customBase = companion.customBase;
-  const bases = companionBasesForKind(companion.kind);
+  const bases = sortByLabel(companionBasesForKind(companion.kind), (b) => t(b.nameKey));
   const baseStats = resolveCompanionBaseStats(companion);
 
   if (!baseStats) return null;

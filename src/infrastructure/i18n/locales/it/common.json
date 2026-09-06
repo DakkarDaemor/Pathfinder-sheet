@@ -152,7 +152,18 @@
       "weight": "Peso",
       "equipped": "Indossato",
       "totalWeight": "Peso totale",
-      "empty": "Nessun oggetto nell'inventario."
+      "empty": "Nessun oggetto nell'inventario.",
+      "damage": "Danno",
+      "critical": "Critico",
+      "armorClassBonus": "Bonus CA",
+      "maxDex": "Des massima",
+      "checkPenalty": "Penalità di prova",
+      "spellFailure": "Fallimento incantesimi",
+      "damageTypes": {
+        "piercing": "Perforazione",
+        "slashing": "Taglio",
+        "bludgeoning": "Contundente"
+      }
     },
     "spells": {
       "heading": "Incantesimi",
